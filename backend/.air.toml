@@ -1,0 +1,6 @@
+[build]
+    cmd = "go build -o ./tmp/main ./cmd/api_server/main.go"
+    bin = "./tmp/main"
+
+[screen]
+    stop_on_error = true

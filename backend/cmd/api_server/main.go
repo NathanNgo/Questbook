@@ -19,7 +19,7 @@ func main() {
 		},
 	)
 
-	fmt.Printf("Started")
+	fmt.Printf("Started on localhost%s\n", defaultServerPort)
 
 	serverError := http.ListenAndServe(defaultServerPort, router)
 

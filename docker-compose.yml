@@ -1,0 +1,5 @@
+name: questbook-stack
+
+include:
+  - backend/docker-compose.yml
+  - infrastructure/docker-compose.yml
