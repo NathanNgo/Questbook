@@ -1,29 +1,45 @@
 package main
 
 import (
-	"fmt"
+	"database/sql"
 	"log"
 	"net/http"
+	"os"
+
+	apiserver "github.com/NathanNgo/Questbook/backend/internal/api_server"
+
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 const defaultServerPort = ":8080"
 
 func main() {
-	router := http.NewServeMux()
+	databaseURL := os.Getenv("DATABASE_URL")
+	if databaseURL == "" {
+		log.Fatalf("Could not find database")
+	}
 
-	router.HandleFunc(
-		"GET /",
-		func(responseWriter http.ResponseWriter, request *http.Request) {
-				fmt.Fprintln(responseWriter, "Hello, World!")
-				fmt.Printf("Received %s\n", request.Method)
-		},
-	)
+	database, err := sql.Open("pgx", databaseURL)
+	if err != nil {
+		log.Fatalf("Error opening database: %v", err)
+	}
+	defer database.Close()
 
-	fmt.Printf("Started on localhost%s\n", defaultServerPort)
+	if err := database.Ping(); err != nil {
+		log.Fatalf("Cannot reach datbase: %v", err)
+	}
 
-	serverError := http.ListenAndServe(defaultServerPort, router)
+	multiplexer := http.NewServeMux()
 
-	if serverError != nil {
-		log.Fatalf("Server failed to start: %v\n", serverError)
+	var sessionHandler *apiserver.SessionHandler
+	sessionHandler = new(apiserver.SessionHandler)
+	sessionHandler.Database = database
+
+	sessionHandler.RegisterRoutes(multiplexer)
+
+	log.Printf("Server started on port %s", defaultServerPort)
+
+	if err := http.ListenAndServe(defaultServerPort, multiplexer); err != nil {
+		log.Fatalf("Server failed: %v", err)
 	}
 }
