@@ -13,6 +13,22 @@ import (
 
 const defaultServerPort = ":8080"
 
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*") 
+		
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
@@ -37,9 +53,15 @@ func main() {
 
 	sessionHandler.RegisterRoutes(multiplexer)
 
+	// --- THE FIX IS HERE ---
+	
+	// 1. Wrap your fully configured multiplexer in the CORS middleware
+	wrappedHandler := corsMiddleware(multiplexer)
+
 	log.Printf("Server started on port %s", defaultServerPort)
 
-	if err := http.ListenAndServe(defaultServerPort, multiplexer); err != nil {
+	// 2. Pass the wrappedHandler to ListenAndServe instead of the raw multiplexer
+	if err := http.ListenAndServe(defaultServerPort, wrappedHandler); err != nil {
 		log.Fatalf("Server failed: %v", err)
 	}
 }

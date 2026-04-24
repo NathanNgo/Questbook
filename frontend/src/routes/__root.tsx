@@ -1,9 +1,11 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import {
     createRootRouteWithContext,
     HeadContent,
     Scripts,
+    Outlet,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
@@ -16,26 +18,26 @@ interface GlobalContext {
 export const Route = createRootRouteWithContext<GlobalContext>()({
     head: () => ({
         meta: [
-            {
-                charSet: "utf-8",
-            },
-            {
-                name: "viewport",
-                content: "width=device-width, initial-scale=1",
-            },
-            {
-                title: "Questbook",
-            },
+            { charSet: "utf-8" },
+            { name: "viewport", content: "width=device-width, initial-scale=1" },
+            { title: "Questbook" },
         ],
-        links: [
-            {
-                rel: "stylesheet",
-                href: appCss,
-            },
-        ],
+        links: [{ rel: "stylesheet", href: appCss }],
     }),
-    shellComponent: RootDocument,
+    component: RootComponent,
 });
+
+function RootComponent() {
+    const { queryClient } = Route.useRouteContext();
+
+    return (
+        <RootDocument>
+            <QueryClientProvider client={queryClient}>
+                <Outlet />
+            </QueryClientProvider>
+        </RootDocument>
+    );
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
     return (
