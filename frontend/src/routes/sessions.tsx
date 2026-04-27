@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { sessionsQueryOptions } from "#/features/lobbies/api/queries";
+import { SessionList } from "#/features/lobbies/components/SessionList";
+import { SessionCreation } from "#/features/lobbies/components/SessionCreation";
 
 export const Route = createFileRoute("/sessions")({
     component: Sessions,
@@ -10,13 +11,10 @@ export const Route = createFileRoute("/sessions")({
 });
 
 function Sessions() {
-    const { data: sessions } = useSuspenseQuery(sessionsQueryOptions());
-
     return (
-        <ul>
-            {sessions.map((session: any) => (
-                <li>{session.channelName}</li>
-            ))}
-        </ul>
+        <>
+            <SessionList />
+            <SessionCreation />
+        </>
     );
 }

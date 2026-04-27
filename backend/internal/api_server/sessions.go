@@ -19,12 +19,12 @@ func (handler *SessionHandler) RegisterRoutes(multiplexer *http.ServeMux) {
 }
 
 type CreateSessionRequest struct {
-	ChannelName string `json:"channelName"`
+	SessionName string `json:"sessionName"`
 }
 
 type CreateSessionResponse struct {
 	Id string `json:"id"`
-	ChannelName string `json:"channelName"`
+	SessionName string `json:"sessionName"`
 }
 
 func (handler *SessionHandler) CreateSession(
@@ -41,9 +41,9 @@ func (handler *SessionHandler) CreateSession(
 	}
 
 	err := handler.Database.QueryRow(
-		"INSERT INTO sessions (channel_name) VALUES ($1) RETURNING id, channel_name",
-		sessionRequest.ChannelName,
-	).Scan(&sessionResponse.Id, &sessionResponse.ChannelName)
+		"INSERT INTO sessions (session_name) VALUES ($1) RETURNING id, session_name",
+		sessionRequest.SessionName,
+	).Scan(&sessionResponse.Id, &sessionResponse.SessionName)
 
 	if err != nil {
 		http.Error(writer, "Database Error", http.StatusInternalServerError)
@@ -56,7 +56,7 @@ func (handler *SessionHandler) CreateSession(
 }
 
 type GetAllSessionsResponseObject struct {
-	ChannelName string `json:"channelName"`
+	SessionName string `json:"sessionName"`
 }
 
 type GetAllSessionsResponse []GetAllSessionsResponseObject
@@ -64,7 +64,7 @@ type GetAllSessionsResponse []GetAllSessionsResponseObject
 func (handler *SessionHandler) GetAllSessions(
 	writer http.ResponseWriter, request *http.Request,
 ) {
-	rows, err := handler.Database.Query("SELECT channel_name FROM sessions")
+	rows, err := handler.Database.Query("SELECT session_name FROM sessions")
 	if err != nil {
 		http.Error(writer, "Query failed", http.StatusInternalServerError)
 		return
@@ -74,7 +74,7 @@ func (handler *SessionHandler) GetAllSessions(
 	sessions := GetAllSessionsResponse{}
 	for rows.Next() {
 		var session GetAllSessionsResponseObject
-		if err := rows.Scan(&session.ChannelName); err != nil {
+		if err := rows.Scan(&session.SessionName); err != nil {
 			continue
 		}
 		sessions = append(sessions, session)
@@ -89,7 +89,7 @@ type GetSessionRequest struct {
 }
 
 type GetSessionResponse struct {
-	ChannelName string `json:"id"`
+	SessionName string `json:"id"`
 }
 
 func (handler *SessionHandler) GetSession(
@@ -103,9 +103,9 @@ func (handler *SessionHandler) GetSession(
 	var sessionResponse GetSessionResponse
 
 	err := handler.Database.QueryRow(
-		"SELECT channel_name FROM sessions WHERE id = ($1)",
+		"SELECT session_name FROM sessions WHERE id = ($1)",
 		sessionId,
-	).Scan(&sessionResponse.ChannelName)
+	).Scan(&sessionResponse.SessionName)
 
 	if err != nil {
 		http.Error(writer, "Query failed", http.StatusInternalServerError)
