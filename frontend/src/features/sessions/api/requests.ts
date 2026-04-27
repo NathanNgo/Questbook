@@ -23,7 +23,19 @@ export async function createSession(payload: CreateSessionPayload) {
     });
 
     if (!response.ok) {
-        throw new Error("Failed to create Questbook sessions");
+        throw new Error("Failed to create Questbook session");
+    }
+
+    return response.json();
+}
+
+export async function deleteSession(sessionId: number) {
+    const response = await fetch(`${BASE_URL}/sessions/${sessionId}`, {
+        method: "DELETE",
+    });
+
+    if (!response.ok) {
+        throw new Error("Faied to delete Questbook session");
     }
 
     return response.json();

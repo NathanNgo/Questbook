@@ -15,7 +15,7 @@ func (handler *SessionHandler) RegisterRoutes(multiplexer *http.ServeMux) {
 	multiplexer.HandleFunc("GET /sessions", handler.GetAllSessions)
 	multiplexer.HandleFunc("GET /sessions/{id}", handler.GetSession)
 	// multiplexer.HandleFunc("PUT /sessions", handler.UpdateSession)
-	multiplexer.HandleFunc("DELETE /sessions", handler.DeleteSession)
+	multiplexer.HandleFunc("DELETE /sessions/{id}", handler.DeleteSession)
 }
 
 type CreateSessionRequest struct {
@@ -55,6 +55,7 @@ func (handler *SessionHandler) CreateSession(
 }
 
 type GetAllSessionsResponseObject struct {
+	Id string `json:"id"`
 	SessionName string `json:"sessionName"`
 }
 
@@ -63,7 +64,7 @@ type GetAllSessionsResponse []GetAllSessionsResponseObject
 func (handler *SessionHandler) GetAllSessions(
 	writer http.ResponseWriter, request *http.Request,
 ) {
-	rows, err := handler.Database.Query("SELECT session_name FROM sessions")
+	rows, err := handler.Database.Query("SELECT id, session_name FROM sessions")
 	if err != nil {
 		http.Error(writer, "Query failed", http.StatusInternalServerError)
 		return
@@ -73,7 +74,7 @@ func (handler *SessionHandler) GetAllSessions(
 	sessions := GetAllSessionsResponse{}
 	for rows.Next() {
 		var session GetAllSessionsResponseObject
-		if err := rows.Scan(&session.SessionName); err != nil {
+		if err := rows.Scan(&session.Id, &session.SessionName); err != nil {
 			continue
 		}
 		sessions = append(sessions, session)
