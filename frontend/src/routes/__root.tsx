@@ -34,6 +34,18 @@ function RootComponent() {
         <RootDocument>
             <QueryClientProvider client={queryClient}>
                 <Outlet />
+                <TanStackDevtools
+                    config={{
+                        position: "bottom-right",
+                    }}
+                    plugins={[
+                        {
+                            name: "Tanstack Router",
+                            render: <TanStackRouterDevtoolsPanel />,
+                        },
+                        TanStackQueryDevtools,
+                    ]}
+                />
             </QueryClientProvider>
         </RootDocument>
     );
@@ -47,18 +59,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             </head>
             <body>
                 {children}
-                <TanStackDevtools
-                    config={{
-                        position: "bottom-right",
-                    }}
-                    plugins={[
-                        {
-                            name: "Tanstack Router",
-                            render: <TanStackRouterDevtoolsPanel />,
-                        },
-                        TanStackQueryDevtools,
-                    ]}
-                />
                 <Scripts />
             </body>
         </html>
