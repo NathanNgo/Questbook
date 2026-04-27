@@ -15,7 +15,7 @@ func (handler *SessionHandler) RegisterRoutes(multiplexer *http.ServeMux) {
 	multiplexer.HandleFunc("GET /sessions", handler.GetAllSessions)
 	multiplexer.HandleFunc("GET /sessions/{id}", handler.GetSession)
 	// multiplexer.HandleFunc("PUT /sessions", handler.UpdateSession)
-	// multiplexer.HandleFunc("DELETE /sessions", handler.DeleteSession)
+	multiplexer.HandleFunc("DELETE /sessions", handler.DeleteSession)
 }
 
 type CreateSessionRequest struct {
@@ -44,7 +44,6 @@ func (handler *SessionHandler) CreateSession(
 		"INSERT INTO sessions (session_name) VALUES ($1) RETURNING id, session_name",
 		sessionRequest.SessionName,
 	).Scan(&sessionResponse.Id, &sessionResponse.SessionName)
-
 	if err != nil {
 		http.Error(writer, "Database Error", http.StatusInternalServerError)
 		return
@@ -81,6 +80,7 @@ func (handler *SessionHandler) GetAllSessions(
 	}
   
 	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusOK)
 	json.NewEncoder(writer).Encode(sessions)
 }
 
@@ -97,7 +97,7 @@ func (handler *SessionHandler) GetSession(
 ) {
 	sessionId := request.PathValue("id")
 	if sessionId == "" {
-		http.Error(writer, "Id is required", http.StatusInternalServerError)
+		http.Error(writer, "Id is required", http.StatusBadRequest)
 	}
 
 	var sessionResponse GetSessionResponse
@@ -106,14 +106,40 @@ func (handler *SessionHandler) GetSession(
 		"SELECT session_name FROM sessions WHERE id = ($1)",
 		sessionId,
 	).Scan(&sessionResponse.SessionName)
-
 	if err != nil {
 		http.Error(writer, "Query failed", http.StatusInternalServerError)
 		return
 	}
 
 	writer.Header().Set("Content-Type", "application/json")
-
+	writer.WriteHeader(http.StatusOK)
 	json.NewEncoder(writer).Encode(sessionResponse)
 
+}
+
+type DeleteSessionResponse struct {
+	Id string `json:"id"`
+	SessionName string `json:"sessionName"`
+}
+
+func (handler *SessionHandler) DeleteSession(
+	writer http.ResponseWriter, request * http.Request,
+) {
+	sessionId := request.PathValue("id")
+	if sessionId == "" {
+		http.Error(writer, "Id is required", http.StatusBadRequest)
+	}
+
+	var sessionResponse DeleteSessionResponse
+
+	err := handler.Database.QueryRow(
+		"DELETE FROM sessions WHERE id = ($1) RETURNING id, session_name", sessionId,
+	).Scan(&sessionResponse.Id, &sessionResponse.SessionName)
+	if err != nil {
+		http.Error(writer, "Query failed", http.StatusInternalServerError)
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusOK)
+	json.NewEncoder(writer).Encode(sessionResponse)
 }
