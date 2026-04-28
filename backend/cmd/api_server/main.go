@@ -29,6 +29,9 @@ func corsMiddleware(multiplexer http.Handler) http.Handler {
 	})
 }
 
+// @title Questbook API Server
+// @version 1.0
+// @description API server for Questbook
 func main() {
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {

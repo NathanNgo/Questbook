@@ -19,7 +19,7 @@ func (handler *SessionHandler) RegisterRoutes(multiplexer *http.ServeMux) {
 	multiplexer.HandleFunc("PATCH /sessions/{id}", handler.UpdateSession)
 }
 
-type CreateSessionRequest struct {
+type CreateSessionRequestPayload struct {
 	SessionName string `json:"sessionName"`
 }
 
@@ -28,10 +28,21 @@ type CreateSessionResponse struct {
 	SessionName string `json:"sessionName"`
 }
 
+// CreateSession godoc
+// @Summary Create a new session
+// @Description Create a new session with the provided session name
+// @Tags sessions
+// @Accept json
+// @Produce json
+// @Param createSessionRequestPayload body CreateSessionRequestPayload
+// @Success 201 {object} CreateSessionResponse
+// @Failure 400 {string} string "Invalid JSON payload"
+// @Failure 500 {string} string "Database Error"
+// @Router /sessions [post]
 func (handler *SessionHandler) CreateSession(
 	writer http.ResponseWriter, request *http.Request,
 ) {
-	var sessionRequest CreateSessionRequest
+	var sessionRequest CreateSessionRequestPayload
 	var sessionResponse CreateSessionResponse
 	decoder := json.NewDecoder(request.Body)
 	decoder.DisallowUnknownFields()
