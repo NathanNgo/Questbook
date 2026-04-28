@@ -14,8 +14,6 @@ export function SessionList({ color = "black" }: SessionListProps) {
         mutate(sessionId);
     }
 
-    console.log(sessions);
-
     return (
         <ul>
             {/*TODO: Give session a proper type*/}

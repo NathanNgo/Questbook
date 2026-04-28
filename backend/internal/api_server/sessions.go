@@ -14,7 +14,6 @@ func (handler *SessionHandler) RegisterRoutes(multiplexer *http.ServeMux) {
 	multiplexer.HandleFunc("POST /sessions", handler.CreateSession)
 	multiplexer.HandleFunc("GET /sessions", handler.GetAllSessions)
 	multiplexer.HandleFunc("GET /sessions/{id}", handler.GetSession)
-	// multiplexer.HandleFunc("PUT /sessions", handler.UpdateSession)
 	multiplexer.HandleFunc("DELETE /sessions/{id}", handler.DeleteSession)
 }
 
