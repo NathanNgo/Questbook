@@ -10,6 +10,11 @@ const config = defineConfig({
         tanstackStart({ spa: { enabled: true } }),
         viteReact(),
     ],
+    server: {
+        watch: {
+            usePolling: true,
+        },
+    },
 });
 
 export default config;
