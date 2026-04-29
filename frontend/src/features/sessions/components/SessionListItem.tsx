@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./SessionListItem.module.css";
+import { useChangeSessionNameMutation } from "../api/mutations";
 
 export type Session = {
     id: number;
@@ -17,24 +18,52 @@ export default function SessionList({
 }: SessionListItemProps) {
     const [isEditingName, setIsEditingName] = useState(false);
     const [newSessionName, setNewSessionName] = useState("");
+    const { mutate } = useChangeSessionNameMutation();
 
     function toggleEditing() {
+        if (!isEditingName) {
+            setNewSessionName(session.sessionName);
+        }
         setIsEditingName((prev) => !prev);
     }
 
+    function changeSessionName(e?: React.SubmitEvent<HTMLFormElement>) {
+        if (e) e.preventDefault();
+        setIsEditingName(false);
+        if (newSessionName == session.sessionName) {
+            return;
+        }
+        mutate({ sessionName: newSessionName, id: session.id });
+        setNewSessionName("");
+    }
+
     const sessionNameInput = (
-        <form>
-            <input type="text" value={newSessionName} />
+        <form onSubmit={changeSessionName}>
+            <input
+                autoFocus
+                type="text"
+                value={newSessionName}
+                onChange={(e) => setNewSessionName(e.target.value)}
+                placeholder="New session name..."
+            />
         </form>
     );
 
-    const sessionNameDisplay = <p>{session.sessionName}</p>;
+    const sessionNameDisplay = (
+        <p onDoubleClick={toggleEditing}>
+            {session.sessionName}({session.id})
+        </p>
+    );
 
     return (
         <li key={session.id} className={styles.sessionListItem}>
             {isEditingName ? sessionNameInput : sessionNameDisplay}
             <button onClick={() => handleDeleteSession(session)}>🗑️</button>
-            <button onClick={toggleEditing}>
+            <button
+                onClick={
+                    isEditingName ? () => changeSessionName() : toggleEditing
+                }
+            >
                 {isEditingName ? "✅" : "✏️"}
             </button>
         </li>
