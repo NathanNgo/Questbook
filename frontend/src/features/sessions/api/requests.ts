@@ -40,3 +40,23 @@ export async function deleteSession(sessionId: number) {
 
     return response.json();
 }
+
+export interface UpdateSessionNamePayload {
+    id: number;
+    sessionName: string;
+}
+
+export async function updateSessionName(payload: UpdateSessionNamePayload) {
+    const response = await fetch(`${BASE_URL}/sessions/${payload.id}/name`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to update session name\npayload:\n${payload}`);
+    }
+    return response.json();
+}
