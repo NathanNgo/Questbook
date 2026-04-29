@@ -50,9 +50,7 @@ export default function SessionList({
     );
 
     const sessionNameDisplay = (
-        <p onDoubleClick={toggleEditing}>
-            {session.sessionName}({session.id})
-        </p>
+        <p onDoubleClick={toggleEditing}>{session.sessionName}</p>
     );
 
     return (
