@@ -15,6 +15,7 @@ func (handler *SessionHandler) RegisterRoutes(multiplexer *http.ServeMux) {
 	multiplexer.HandleFunc("GET /sessions", handler.GetAllSessions)
 	multiplexer.HandleFunc("GET /sessions/{id}", handler.GetSession)
 	multiplexer.HandleFunc("DELETE /sessions/{id}", handler.DeleteSession)
+	multiplexer.HandleFunc("PATCH /sessions/{id}/name", handler.UpdateSessionName)
 }
 
 type CreateSessionRequest struct {
@@ -137,6 +138,44 @@ func (handler *SessionHandler) DeleteSession(
 	).Scan(&sessionResponse.Id, &sessionResponse.SessionName)
 	if err != nil {
 		http.Error(writer, "Query failed", http.StatusInternalServerError)
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusOK)
+	json.NewEncoder(writer).Encode(sessionResponse)
+}
+
+type UpdateSessionNameRequest struct {
+	Id string `json:"id"`
+	SessionName string `json:"sessionName"`
+}
+
+type UpdateSessionNameResponse struct {
+	Id string `json:"id"`
+	SessionName string `json:"sessionName"`
+}
+
+func (handler *SessionHandler) UpdateSessionName(
+	writer http.ResponseWriter, request *http.Request,
+){
+	var sessionRequest UpdateSessionNameRequest
+	var sessionResponse UpdateSessionNameResponse
+
+	decoder := json.NewDecoder(request.Body)
+	decoder.DisallowUnknownFields()
+
+	if err := decoder.Decode((&sessionRequest)); err != nil{
+		http.Error (writer, "Invalid JSON payload", http.StatusBadRequest)
+		return
+	}
+
+	err := handler.Database.QueryRow(
+		"UPDATE sessions SET session_name = $1 where id = $2 RETURNING id, session_name", 
+		sessionRequest.SessionName, sessionRequest.Id,
+		).Scan(&sessionResponse.Id , &sessionResponse.SessionName)
+	if err != nil{
+		http.Error(writer, "Database Error", http.StatusInternalServerError)
+		return
 	}
 
 	writer.Header().Set("Content-Type", "application/json")
