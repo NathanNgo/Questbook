@@ -22,6 +22,7 @@ export default function SessionList({ color = "black" }: SessionListProps) {
                 <SessionListItem
                     session={session}
                     handleDeleteSession={deleteSession}
+                    key={session.id}
                 />
             ))}
         </ul>
