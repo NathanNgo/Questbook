@@ -1,29 +1,39 @@
 import { useState } from "react";
+import styles from "./SessionListItem.module.css";
 
-type Session = {
+export type Session = {
     id: number;
     sessionName: string;
 };
 
 interface SessionListItemProps {
     session: Session;
-    handleSubmitSession: (session: Session) => void;
+    handleDeleteSession: (session: Session) => void;
 }
 
-export function SessionList({
+export default function SessionList({
     session,
-    handleSubmitSession,
+    handleDeleteSession,
 }: SessionListItemProps) {
     const [isEditingName, setIsEditingName] = useState(false);
+    const [newSessionName, setNewSessionName] = useState("");
 
     function toggleEditing() {
         setIsEditingName((prev) => !prev);
     }
 
+    const sessionNameInput = (
+        <form>
+            <input type="text" value={newSessionName} />
+        </form>
+    );
+
+    const sessionNameDisplay = <p>{session.sessionName}</p>;
+
     return (
-        <li key={session.id}>
-            {session.sessionName}{" "}
-            <button onClick={() => handleSubmitSession(session)}>🗑️</button>
+        <li key={session.id} className={styles.sessionListItem}>
+            {isEditingName ? sessionNameInput : sessionNameDisplay}
+            <button onClick={() => handleDeleteSession(session)}>🗑️</button>
             <button onClick={toggleEditing}>
                 {isEditingName ? "✅" : "✏️"}
             </button>

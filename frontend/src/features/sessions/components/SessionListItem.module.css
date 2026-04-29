@@ -1,0 +1,4 @@
+.sessionListItem {
+    display: flex;
+    flex-direction: row;
+}
