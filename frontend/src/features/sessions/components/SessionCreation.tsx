@@ -11,14 +11,23 @@ export function SessionCreation() {
         setSessionName(event.target.value);
     }
 
-    function handleSubmit() {
+    function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+        e.preventDefault();
         mutate({ sessionName });
+        setSessionName("");
     }
 
     return (
         <>
-            <input onChange={handleChange}></input>
-            <button onClick={handleSubmit}> Submit </button>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    onChange={handleChange}
+                    value={sessionName}
+                    placeholder="How ya doin'?"
+                />
+                <button type="submit"> Submit </button>
+            </form>
         </>
     );
 }
