@@ -18,13 +18,15 @@ export default function SessionList({ color = "black" }: SessionListProps) {
     return (
         <ul>
             {/*TODO: Give session a proper type*/}
-            {sessions.map((session: Session) => (
-                <SessionListItem
-                    session={session}
-                    handleDeleteSession={deleteSession}
-                    key={session.id}
-                />
-            ))}
+            {sessions
+                .sort((a: Session, b: Session) => a.id - b.id)
+                .map((session: Session) => (
+                    <SessionListItem
+                        session={session}
+                        handleDeleteSession={deleteSession}
+                        key={session.id}
+                    />
+                ))}
         </ul>
     );
 }
