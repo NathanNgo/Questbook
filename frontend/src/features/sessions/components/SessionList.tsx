@@ -20,7 +20,14 @@ export default function SessionList({ color = "black" }: SessionListProps) {
         <ul>
             {/*TODO: Give session a proper type*/}
             {sessions
-                .sort((a: Session, b: Session) => a.id - b.id)
+                .sort(
+                    (
+                        theFirstSessionVariableInTheContextOfSorting: Session,
+                        theSecondSessionVariableInTheContextOfSorting: Session,
+                    ) =>
+                        theFirstSessionVariableInTheContextOfSorting.id -
+                        theSecondSessionVariableInTheContextOfSorting.id,
+                )
                 .map((session: Session) => (
                     <SessionListItem
                         session={session}
