@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import styles from "./SessionListItem.module.css";
 import { useChangeSessionNameMutation } from "../api/mutations";
 import type { Session } from "../api/types";
@@ -18,7 +18,8 @@ export default function SessionListItem({
 
     const handleDeleteSession = () => onDeleteSession(session);
 
-    function handleStartEditingName() {
+    function handleStartEditingName(event: React.MouseEvent) {
+        event.preventDefault();
         setIsEditingName(true);
     }
 
@@ -35,21 +36,28 @@ export default function SessionListItem({
         mutate({ sessionName: newSessionName, id: session.id });
     }
 
+    const formId = useId();
+
     const sessionNameEditView = (
-        <form
-            onSubmit={handleSubmitSessionName}
-            className={styles.sessionNameInputForm}
-        >
-            <input
-                className={styles.sessionNameInput}
-                autoFocus
-                type="text"
-                value={newSessionName}
-                onChange={(e) => setNewSessionName(e.target.value)}
-                placeholder="New session name..."
-            />
-            <button type="submit">✅</button>
-        </form>
+        <>
+            <form
+                id={formId}
+                onSubmit={handleSubmitSessionName}
+                className={styles.sessionNameInputForm}
+            >
+                <input
+                    className={styles.sessionNameInput}
+                    autoFocus
+                    type="text"
+                    value={newSessionName}
+                    onChange={(e) => setNewSessionName(e.target.value)}
+                    placeholder="New session name..."
+                />
+            </form>
+            <button type="submit" form={formId}>
+                ✅
+            </button>
+        </>
     );
 
     const sessionNameDisplayView = (
