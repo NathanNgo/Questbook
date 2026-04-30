@@ -35,6 +35,7 @@ export default function SessionList({
     const sessionNameInput = (
         <form onSubmit={handleSubmitSessionName}>
             <input
+                className={styles.sessionNameInput}
                 autoFocus
                 type="text"
                 value={newSessionName}
@@ -45,18 +46,23 @@ export default function SessionList({
     );
 
     const sessionNameDisplay = (
-        <p onDoubleClick={handleStartEditingName}>{session.sessionName}</p>
+        <p
+            onDoubleClick={handleStartEditingName}
+            className={styles.sessionNameDisplay}
+        >
+            {session.sessionName}
+        </p>
     );
 
     return (
-        <li key={session.id} className={styles.sessionListItem}>
+        <div key={session.id} className={styles.sessionListItem}>
             {isEditingName ? sessionNameInput : sessionNameDisplay}
-            <button onClick={() => onDeleteSession(session)}>🗑️</button>
             {isEditingName ? (
                 <button onClick={() => handleSubmitSessionName()}>✅</button>
             ) : (
                 <button onClick={handleStartEditingName}>✏️</button>
             )}
-        </li>
+            <button onClick={() => onDeleteSession(session)}>🗑️</button>
+        </div>
     );
 }
