@@ -23,8 +23,8 @@ export default function SessionListItem({
         setIsEditingName(true);
     }
 
-    function handleSubmitSessionName(e?: React.SubmitEvent<HTMLFormElement>) {
-        if (e) e.preventDefault();
+    function handleSubmitSessionName(event?: React.SubmitEvent) {
+        if (event) event.preventDefault();
         setIsEditingName(false);
         if (!newSessionName.trim()) {
             setNewSessionName(session.sessionName);
