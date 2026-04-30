@@ -15,7 +15,7 @@ func (handler *SessionHandler) RegisterRoutes(multiplexer *http.ServeMux) {
 	multiplexer.HandleFunc("GET /sessions", handler.GetAllSessions)
 	multiplexer.HandleFunc("GET /sessions/{id}", handler.GetSession)
 	multiplexer.HandleFunc("DELETE /sessions/{id}", handler.DeleteSession)
-	multiplexer.HandleFunc("PATCH /sessions/{id}/name", handler.UpdateSessionName)
+	multiplexer.HandleFunc("PATCH /sessions/{id}/name", handler.UpdateSession)
 }
 
 type CreateSessionRequest struct {
@@ -145,21 +145,21 @@ func (handler *SessionHandler) DeleteSession(
 	json.NewEncoder(writer).Encode(sessionResponse)
 }
 
-type UpdateSessionNameRequest struct {
+type UpdateSessionRequest struct {
+	Id *string `json:"id"`
+	SessionName *string `json:"sessionName"`
+}
+
+type UpdateSessionResponse struct {
 	Id string `json:"id"`
 	SessionName string `json:"sessionName"`
 }
 
-type UpdateSessionNameResponse struct {
-	Id string `json:"id"`
-	SessionName string `json:"sessionName"`
-}
-
-func (handler *SessionHandler) UpdateSessionName(
+func (handler *SessionHandler) UpdateSession(
 	writer http.ResponseWriter, request *http.Request,
 ){
-	var sessionRequest UpdateSessionNameRequest
-	var sessionResponse UpdateSessionNameResponse
+	var sessionRequest UpdateSessionRequest
+	var sessionResponse UpdateSessionResponse
 
 	decoder := json.NewDecoder(request.Body)
 	decoder.DisallowUnknownFields()
@@ -169,10 +169,25 @@ func (handler *SessionHandler) UpdateSessionName(
 		return
 	}
 
+	// Check if all non-id fields are nil (if so, nothing to update)
+	if sessionRequest.SessionName == nil {
+		http.Error(writer, "No fields to update", http.StatusBadRequest)
+		return
+	}
+
+	query := `
+	UPDATE sessions
+	SET
+		session_name = COALESCE($1, session_name)
+	WHERE id = $2
+	RETURNING id, session_name
+	`
+
 	err := handler.Database.QueryRow(
-		"UPDATE sessions SET session_name = $1 where id = $2 RETURNING id, session_name", 
+		query, 
 		sessionRequest.SessionName, sessionRequest.Id,
 		).Scan(&sessionResponse.Id , &sessionResponse.SessionName)
+	
 	if err != nil{
 		http.Error(writer, "Database Error", http.StatusInternalServerError)
 		return
