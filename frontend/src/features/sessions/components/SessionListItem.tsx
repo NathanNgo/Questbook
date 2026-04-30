@@ -8,13 +8,16 @@ interface SessionListItemProps {
     onDeleteSession: (session: Session) => void;
 }
 
-export default function SessionList({
+export default function SessionListItem({
     session,
     onDeleteSession,
 }: SessionListItemProps) {
     const [isEditingName, setIsEditingName] = useState(false);
     const [newSessionName, setNewSessionName] = useState(session.sessionName);
     const { mutate } = useChangeSessionNameMutation();
+
+    const handleDeleteSession = () => onDeleteSession(session);
+
     function handleStartEditingName() {
         setIsEditingName(true);
     }
@@ -22,18 +25,21 @@ export default function SessionList({
     function handleSubmitSessionName(e?: React.SubmitEvent<HTMLFormElement>) {
         if (e) e.preventDefault();
         setIsEditingName(false);
-        if (!newSessionName) {
+        if (!newSessionName.trim()) {
             setNewSessionName(session.sessionName);
             return;
         }
-        if (newSessionName == session.sessionName) {
+        if (newSessionName === session.sessionName) {
             return;
         }
         mutate({ sessionName: newSessionName, id: session.id });
     }
 
     const sessionNameInput = (
-        <form onSubmit={handleSubmitSessionName}>
+        <form
+            onSubmit={handleSubmitSessionName}
+            className={styles.sessionNameInputForm}
+        >
             <input
                 className={styles.sessionNameInput}
                 autoFocus
@@ -42,27 +48,26 @@ export default function SessionList({
                 onChange={(e) => setNewSessionName(e.target.value)}
                 placeholder="New session name..."
             />
+            <button type="submit">✅</button>
         </form>
     );
 
     const sessionNameDisplay = (
-        <p
-            onDoubleClick={handleStartEditingName}
-            className={styles.sessionNameDisplay}
-        >
-            {session.sessionName}
-        </p>
+        <>
+            <p
+                onDoubleClick={handleStartEditingName}
+                className={styles.sessionNameDisplay}
+            >
+                {session.sessionName}
+            </p>
+            <button onClick={handleStartEditingName}>✏️</button>
+        </>
     );
 
     return (
-        <div key={session.id} className={styles.sessionListItem}>
+        <div className={styles.sessionListItem}>
             {isEditingName ? sessionNameInput : sessionNameDisplay}
-            {isEditingName ? (
-                <button onClick={() => handleSubmitSessionName()}>✅</button>
-            ) : (
-                <button onClick={handleStartEditingName}>✏️</button>
-            )}
-            <button onClick={() => onDeleteSession(session)}>🗑️</button>
+            <button onClick={handleDeleteSession}>🗑️</button>
         </div>
     );
 }
