@@ -13,7 +13,7 @@ export default function SessionList({
     onDeleteSession,
 }: SessionListItemProps) {
     const [isEditingName, setIsEditingName] = useState(false);
-    const [newSessionName, setNewSessionName] = useState("");
+    const [newSessionName, setNewSessionName] = useState(session.sessionName);
     const { mutate } = useChangeSessionNameMutation();
     function handleStartEditingName() {
         setIsEditingName(true);
@@ -22,6 +22,10 @@ export default function SessionList({
     function handleSubmitSessionName(e?: React.SubmitEvent<HTMLFormElement>) {
         if (e) e.preventDefault();
         setIsEditingName(false);
+        if (!newSessionName) {
+            setNewSessionName(session.sessionName);
+            return;
+        }
         if (newSessionName == session.sessionName) {
             return;
         }
