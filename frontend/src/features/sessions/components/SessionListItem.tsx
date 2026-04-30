@@ -35,7 +35,7 @@ export default function SessionListItem({
         mutate({ sessionName: newSessionName, id: session.id });
     }
 
-    const sessionNameInput = (
+    const sessionNameEditView = (
         <form
             onSubmit={handleSubmitSessionName}
             className={styles.sessionNameInputForm}
@@ -52,7 +52,7 @@ export default function SessionListItem({
         </form>
     );
 
-    const sessionNameDisplay = (
+    const sessionNameDisplayView = (
         <>
             <p
                 onDoubleClick={handleStartEditingName}
@@ -66,7 +66,7 @@ export default function SessionListItem({
 
     return (
         <div className={styles.sessionListItem}>
-            {isEditingName ? sessionNameInput : sessionNameDisplay}
+            {isEditingName ? sessionNameEditView : sessionNameDisplayView}
             <button onClick={handleDeleteSession}>🗑️</button>
         </div>
     );
