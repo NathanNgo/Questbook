@@ -15,26 +15,21 @@ export default function SessionList({
     const [isEditingName, setIsEditingName] = useState(false);
     const [newSessionName, setNewSessionName] = useState("");
     const { mutate } = useChangeSessionNameMutation();
-
-    function toggleEditing() {
-        if (!isEditingName) {
-            setNewSessionName(session.sessionName);
-        }
-        setIsEditingName((prev) => !prev);
+    function handleStartEditingName() {
+        setIsEditingName(true);
     }
 
-    function changeSessionName(e?: React.SubmitEvent<HTMLFormElement>) {
+    function handleSubmitSessionName(e?: React.SubmitEvent<HTMLFormElement>) {
         if (e) e.preventDefault();
         setIsEditingName(false);
         if (newSessionName == session.sessionName) {
             return;
         }
         mutate({ sessionName: newSessionName, id: session.id });
-        setNewSessionName("");
     }
 
     const sessionNameInput = (
-        <form onSubmit={changeSessionName}>
+        <form onSubmit={handleSubmitSessionName}>
             <input
                 autoFocus
                 type="text"
@@ -46,20 +41,18 @@ export default function SessionList({
     );
 
     const sessionNameDisplay = (
-        <p onDoubleClick={toggleEditing}>{session.sessionName}</p>
+        <p onDoubleClick={handleStartEditingName}>{session.sessionName}</p>
     );
 
     return (
         <li key={session.id} className={styles.sessionListItem}>
             {isEditingName ? sessionNameInput : sessionNameDisplay}
             <button onClick={() => onDeleteSession(session)}>🗑️</button>
-            <button
-                onClick={
-                    isEditingName ? () => changeSessionName() : toggleEditing
-                }
-            >
-                {isEditingName ? "✅" : "✏️"}
-            </button>
+            {isEditingName ? (
+                <button onClick={() => handleSubmitSessionName()}>✅</button>
+            ) : (
+                <button onClick={handleStartEditingName}>✏️</button>
+            )}
         </li>
     );
 }
