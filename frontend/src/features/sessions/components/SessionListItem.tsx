@@ -5,12 +5,12 @@ import type { Session } from "../api/types";
 
 interface SessionListItemProps {
     session: Session;
-    handleDeleteSession: (session: Session) => void;
+    onDeleteSession: (session: Session) => void;
 }
 
 export default function SessionList({
     session,
-    handleDeleteSession,
+    onDeleteSession,
 }: SessionListItemProps) {
     const [isEditingName, setIsEditingName] = useState(false);
     const [newSessionName, setNewSessionName] = useState("");
@@ -52,7 +52,7 @@ export default function SessionList({
     return (
         <li key={session.id} className={styles.sessionListItem}>
             {isEditingName ? sessionNameInput : sessionNameDisplay}
-            <button onClick={() => handleDeleteSession(session)}>🗑️</button>
+            <button onClick={() => onDeleteSession(session)}>🗑️</button>
             <button
                 onClick={
                     isEditingName ? () => changeSessionName() : toggleEditing

@@ -24,7 +24,7 @@ export default function SessionList({ color = "black" }: SessionListProps) {
                 .map((session: Session) => (
                     <SessionListItem
                         session={session}
-                        handleDeleteSession={handleDeleteSession}
+                        onDeleteSession={handleDeleteSession}
                         key={session.id}
                     />
                 ))}
