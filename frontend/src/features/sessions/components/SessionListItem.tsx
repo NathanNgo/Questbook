@@ -1,11 +1,7 @@
 import { useState } from "react";
 import styles from "./SessionListItem.module.css";
 import { useChangeSessionNameMutation } from "../api/mutations";
-
-export type Session = {
-    id: number;
-    sessionName: string;
-};
+import type { Session } from "../api/types";
 
 interface SessionListItemProps {
     session: Session;
