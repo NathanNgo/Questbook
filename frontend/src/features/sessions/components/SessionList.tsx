@@ -3,6 +3,8 @@ import { sessionsQueryOptions } from "../api/queries";
 import { useDeleteSessionMutation } from "../api/mutations";
 import SessionListItem from "./SessionListItem";
 import type { Session } from "../api/types";
+import styles from "./SessionList.module.css";
+import { sortByNumericValue } from "#/shared/utils/sortBy";
 
 interface SessionListProps {
     color?: string;
@@ -17,24 +19,17 @@ export default function SessionList({ color = "black" }: SessionListProps) {
     }
 
     return (
-        <ul>
+        <div className={styles.sessionList}>
             {/*TODO: Give session a proper type*/}
-            {sessions
-                .sort(
-                    (
-                        theFirstSessionVariableInTheContextOfSorting: Session,
-                        theSecondSessionVariableInTheContextOfSorting: Session,
-                    ) =>
-                        theFirstSessionVariableInTheContextOfSorting.id -
-                        theSecondSessionVariableInTheContextOfSorting.id,
-                )
-                .map((session: Session) => (
+            {(sessions as Session[])
+                .sort(sortByNumericValue((session) => session.id))
+                .map((session) => (
                     <SessionListItem
                         session={session}
                         onDeleteSession={handleDeleteSession}
                         key={session.id}
                     />
                 ))}
-        </ul>
+        </div>
     );
 }
