@@ -2,9 +2,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
     createSession,
     deleteSession,
-    updateSessionName,
+    updateSession,
     type CreateSessionPayload,
-    type UpdateSessionNamePayload,
+    type UpdateSessionPayload,
 } from "./requests";
 
 export function useCreateSessionMutation() {
@@ -32,8 +32,7 @@ export function useDeleteSessionMutation() {
 export function useChangeSessionNameMutation() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (payload: UpdateSessionNamePayload) =>
-            updateSessionName(payload),
+        mutationFn: (payload: UpdateSessionPayload) => updateSession(payload),
         onSuccess: () =>
             queryClient.invalidateQueries({ queryKey: ["sessions"] }),
     });
