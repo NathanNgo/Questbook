@@ -11,8 +11,8 @@ export default function SessionCreation() {
         setSessionName(event.target.value);
     }
 
-    function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
-        e.preventDefault();
+    function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
+        event.preventDefault();
         mutate({ sessionName });
         setSessionName("");
     }
