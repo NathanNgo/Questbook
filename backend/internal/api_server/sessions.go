@@ -164,7 +164,7 @@ func (handler *SessionHandler) UpdateSession(
 	decoder := json.NewDecoder(request.Body)
 	decoder.DisallowUnknownFields()
 
-	if err := decoder.Decode((&sessionRequest)); err != nil{
+	if err := decoder.Decode(&sessionRequest); err != nil{
 		http.Error (writer, "Invalid JSON payload", http.StatusBadRequest)
 		return
 	}
