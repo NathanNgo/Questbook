@@ -1,4 +1,4 @@
-import type { Session } from "./types";
+import type { CreateSessionPayload, UpdateSessionPayload } from "./payloads";
 
 const BASE_URL = "http://localhost:8080";
 
@@ -9,10 +9,6 @@ export async function fetchSessions() {
     }
 
     return response.json();
-}
-
-export interface CreateSessionPayload {
-    sessionName: string;
 }
 
 export async function createSession(payload: CreateSessionPayload) {
@@ -43,12 +39,11 @@ export async function deleteSession(sessionId: number) {
     return response.json();
 }
 
-export type UpdateSessionPayload = { id: number } & Partial<
-    Omit<Session, "id">
->;
-
-export async function updateSession(payload: UpdateSessionPayload) {
-    const response = await fetch(`${BASE_URL}/sessions/${payload.id}`, {
+export async function updateSession(
+    sessionId: number,
+    payload: UpdateSessionPayload,
+) {
+    const response = await fetch(`${BASE_URL}/sessions/${sessionId}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",

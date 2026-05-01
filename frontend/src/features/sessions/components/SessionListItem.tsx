@@ -36,7 +36,10 @@ export default function SessionListItem({
         if (newSessionName === session.sessionName) {
             return;
         }
-        mutate({ sessionName: newSessionName, id: session.id });
+        mutate({
+            sessionId: session.id,
+            payload: { sessionName: newSessionName },
+        });
     }
 
     function handleSessionNameInputKeyDown(event: React.KeyboardEvent) {
