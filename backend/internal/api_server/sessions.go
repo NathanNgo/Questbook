@@ -85,9 +85,6 @@ func (handler *SessionHandler) GetAllSessions(
 	json.NewEncoder(writer).Encode(sessions)
 }
 
-type GetSessionRequest struct {
-	Id string `json:"id"`
-}
 
 type GetSessionResponse struct {
 	SessionName string `json:"id"`
