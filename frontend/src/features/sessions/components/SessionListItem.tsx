@@ -13,7 +13,9 @@ export default function SessionListItem({
     onDeleteSession,
 }: SessionListItemProps) {
     const [isEditingName, setIsEditingName] = useState(false);
-    const [newSessionName, setNewSessionName] = useState(session.sessionName);
+    const [sessionNameInputValue, setSessionNameInputValue] = useState(
+        session.sessionName,
+    );
     const { mutate } = useChangeSessionNameMutation();
 
     const handleDeleteSession = () => onDeleteSession(session);
@@ -26,14 +28,22 @@ export default function SessionListItem({
     function handleSubmitSessionName(event?: React.SubmitEvent) {
         if (event) event.preventDefault();
         setIsEditingName(false);
-        if (!newSessionName.trim()) {
-            setNewSessionName(session.sessionName);
+        const newSessionName = sessionNameInputValue.trim();
+        if (!newSessionName) {
+            setSessionNameInputValue(session.sessionName);
             return;
         }
         if (newSessionName === session.sessionName) {
             return;
         }
         mutate({ sessionName: newSessionName, id: session.id });
+    }
+
+    function handleSessionNameInputKeyDown(event: React.KeyboardEvent) {
+        if (event.key === "Escape") {
+            setIsEditingName(false);
+            setSessionNameInputValue(session.sessionName);
+        }
     }
 
     const formId = useId();
@@ -49,9 +59,10 @@ export default function SessionListItem({
                     className={styles.sessionNameInput}
                     autoFocus
                     type="text"
-                    value={newSessionName}
-                    onChange={(e) => setNewSessionName(e.target.value)}
+                    value={sessionNameInputValue}
+                    onChange={(e) => setSessionNameInputValue(e.target.value)}
                     placeholder="New session name..."
+                    onKeyDown={handleSessionNameInputKeyDown}
                 />
             </form>
             <button type="submit" form={formId}>
