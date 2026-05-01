@@ -13,7 +13,10 @@ export default function SessionCreation() {
 
     function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
-        mutate({ sessionName });
+        if (!sessionName.trim()) {
+            return;
+        }
+        mutate({ sessionName: sessionName.trim() });
         setSessionName("");
     }
 
