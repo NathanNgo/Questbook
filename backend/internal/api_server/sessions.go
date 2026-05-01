@@ -15,7 +15,7 @@ func (handler *SessionHandler) RegisterRoutes(multiplexer *http.ServeMux) {
 	multiplexer.HandleFunc("GET /sessions", handler.GetAllSessions)
 	multiplexer.HandleFunc("GET /sessions/{id}", handler.GetSession)
 	multiplexer.HandleFunc("DELETE /sessions/{id}", handler.DeleteSession)
-	multiplexer.HandleFunc("PATCH /sessions/{id}/name", handler.UpdateSession)
+	multiplexer.HandleFunc("PATCH /sessions/{id}", handler.UpdateSession)
 }
 
 type CreateSessionRequest struct {

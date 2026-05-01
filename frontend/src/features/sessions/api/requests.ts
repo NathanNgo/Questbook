@@ -48,7 +48,7 @@ export type UpdateSessionPayload = { id: number } & Partial<
 >;
 
 export async function updateSession(payload: UpdateSessionPayload) {
-    const response = await fetch(`${BASE_URL}/sessions/${payload.id}/name`, {
+    const response = await fetch(`${BASE_URL}/sessions/${payload.id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
