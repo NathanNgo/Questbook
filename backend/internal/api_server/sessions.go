@@ -146,7 +146,6 @@ func (handler *SessionHandler) DeleteSession(
 }
 
 type UpdateSessionRequest struct {
-	Id *string `json:"id"`
 	SessionName *string `json:"sessionName"`
 }
 
@@ -160,6 +159,8 @@ func (handler *SessionHandler) UpdateSession(
 ){
 	var sessionRequest UpdateSessionRequest
 	var sessionResponse UpdateSessionResponse
+
+	sessionId := request.PathValue("id")
 
 	decoder := json.NewDecoder(request.Body)
 	decoder.DisallowUnknownFields()
@@ -185,7 +186,7 @@ func (handler *SessionHandler) UpdateSession(
 
 	err := handler.Database.QueryRow(
 		query, 
-		sessionRequest.SessionName, sessionRequest.Id,
+		sessionRequest.SessionName, sessionId,
 		).Scan(&sessionResponse.Id , &sessionResponse.SessionName)
 	
 	if err != nil{
