@@ -15,6 +15,7 @@ func (handler *SessionHandler) RegisterRoutes(multiplexer *http.ServeMux) {
 	multiplexer.HandleFunc("GET /sessions", handler.GetAllSessions)
 	multiplexer.HandleFunc("GET /sessions/{id}", handler.GetSession)
 	multiplexer.HandleFunc("DELETE /sessions/{id}", handler.DeleteSession)
+	multiplexer.HandleFunc("PATCH /sessions/{id}", handler.UpdateSession)
 }
 
 type CreateSessionRequest struct {
@@ -84,9 +85,6 @@ func (handler *SessionHandler) GetAllSessions(
 	json.NewEncoder(writer).Encode(sessions)
 }
 
-type GetSessionRequest struct {
-	Id string `json:"id"`
-}
 
 type GetSessionResponse struct {
 	SessionName string `json:"id"`
@@ -137,6 +135,64 @@ func (handler *SessionHandler) DeleteSession(
 	).Scan(&sessionResponse.Id, &sessionResponse.SessionName)
 	if err != nil {
 		http.Error(writer, "Query failed", http.StatusInternalServerError)
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusOK)
+	json.NewEncoder(writer).Encode(sessionResponse)
+}
+
+type UpdateSessionRequest struct {
+	SessionName *string `json:"sessionName"`
+}
+
+type UpdateSessionResponse struct {
+	Id string `json:"id"`
+	SessionName string `json:"sessionName"`
+}
+
+func (handler *SessionHandler) UpdateSession(
+	writer http.ResponseWriter, request *http.Request,
+){
+	var sessionRequest UpdateSessionRequest
+	var sessionResponse UpdateSessionResponse
+
+	sessionId := request.PathValue("id")
+	if sessionId == "" {
+		http.Error (writer, "ID is required", http.StatusBadRequest)
+		return
+	}
+
+	decoder := json.NewDecoder(request.Body)
+	decoder.DisallowUnknownFields()
+
+	if err := decoder.Decode(&sessionRequest); err != nil{
+		http.Error (writer, "Invalid JSON payload", http.StatusBadRequest)
+		return
+	}
+
+	// Check if all non-id fields are nil (if so, nothing to update)
+	if sessionRequest.SessionName == nil {
+		http.Error(writer, "No fields to update", http.StatusBadRequest)
+		return
+	}
+
+	query := `
+	UPDATE sessions
+	SET
+		session_name = COALESCE($1, session_name)
+	WHERE id = $2
+	RETURNING id, session_name
+	`
+
+	err := handler.Database.QueryRow(
+		query, 
+		sessionRequest.SessionName, sessionId,
+		).Scan(&sessionResponse.Id , &sessionResponse.SessionName)
+	
+	if err != nil{
+		http.Error(writer, "Database Error", http.StatusInternalServerError)
+		return
 	}
 
 	writer.Header().Set("Content-Type", "application/json")

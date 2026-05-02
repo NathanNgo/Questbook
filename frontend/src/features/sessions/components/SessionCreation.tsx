@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useCreateSessionMutation } from "../api/mutations";
 
-export function SessionCreation() {
+export default function SessionCreation() {
     // Controlled State for Input
     const [sessionName, setSessionName] = useState("");
     const { mutate } = useCreateSessionMutation();
@@ -11,14 +11,26 @@ export function SessionCreation() {
         setSessionName(event.target.value);
     }
 
-    function handleSubmit() {
-        mutate({ sessionName });
+    function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
+        event.preventDefault();
+        if (!sessionName.trim()) {
+            return;
+        }
+        mutate({ sessionName: sessionName.trim() });
+        setSessionName("");
     }
 
     return (
         <>
-            <input onChange={handleChange}></input>
-            <button onClick={handleSubmit}> Submit </button>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    onChange={handleChange}
+                    value={sessionName}
+                    placeholder="How ya doin'?"
+                />
+                <button type="submit"> Submit </button>
+            </form>
         </>
     );
 }

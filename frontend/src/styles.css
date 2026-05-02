@@ -8,3 +8,7 @@ body {
     font-family: sans-serif;
     padding: 2rem;
 }
+
+button {
+    cursor: pointer;
+}

@@ -1,3 +1,5 @@
+import type { CreateSessionPayload, UpdateSessionPayload } from "./payloads";
+
 const BASE_URL = "http://localhost:8080";
 
 export async function fetchSessions() {
@@ -7,10 +9,6 @@ export async function fetchSessions() {
     }
 
     return response.json();
-}
-
-export interface CreateSessionPayload {
-    sessionName: string;
 }
 
 export async function createSession(payload: CreateSessionPayload) {
@@ -38,5 +36,23 @@ export async function deleteSession(sessionId: number) {
         throw new Error("Faied to delete Questbook session");
     }
 
+    return response.json();
+}
+
+export async function updateSession(
+    sessionId: number,
+    payload: UpdateSessionPayload,
+) {
+    const response = await fetch(`${BASE_URL}/sessions/${sessionId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to update session name\npayload:\n${payload}`);
+    }
     return response.json();
 }

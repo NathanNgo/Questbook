@@ -1,0 +1,29 @@
+.sessionListItem {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: space-between;
+    box-sizing: content-box;
+    padding: 10px;
+}
+
+.sessionListItem:hover {
+    background-color: antiquewhite;
+}
+
+.sessionNameInput {
+    width: 200px;
+}
+
+.sessionNameInputForm {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.sessionNameDisplay {
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+}
