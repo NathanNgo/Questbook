@@ -158,6 +158,10 @@ func (handler *SessionHandler) UpdateSession(
 	var sessionResponse UpdateSessionResponse
 
 	sessionId := request.PathValue("id")
+	if sessionId == "" {
+		http.Error (writer, "ID is required", http.StatusBadRequest)
+		return
+	}
 
 	decoder := json.NewDecoder(request.Body)
 	decoder.DisallowUnknownFields()
