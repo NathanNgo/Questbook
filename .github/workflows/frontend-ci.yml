@@ -44,7 +44,7 @@ jobs:
         run: pnpm biome check ./src
       
   typecheck:
-    name: Typecheck
+    name: Typecheck Typescript
     runs-on: ubuntu-latest
     permissions:
         contents: read
