@@ -48,6 +48,7 @@ jobs:
         uses: ls-lint/action@v2
         with:
           version: v2.12.0
-          working-directory: backend
+          workdir: backend
+          config: backend/.ls-lint.yml
 
     # TODO: Add proper SQL linting instead of just filename linting
