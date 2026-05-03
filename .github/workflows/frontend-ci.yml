@@ -72,5 +72,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run Typecher
+      - name: Run Typechecker
         run: pnpm exec tsc --no-emit
