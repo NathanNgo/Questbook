@@ -16,11 +16,18 @@ formatters:
         - github.com/NathanNgo/Questbook/backend
 
 output:
+  path-mode: "abs"
+  sort-order:
+    - linter
+    - severity
+    - file
+  show-stats: true
+  
   formats:
-    - name: text
+    text:
       path: stdout
-      settings:
-        print-issued-lines: true
-        print-linter-name: true
-    - name: github-actions
+      print-linter-name: true
+      print-issued-lines: true
+      colors: true
+    github-actions:
       path: stdout
