@@ -50,4 +50,8 @@ jobs:
           workdir: backend
           config: backend/.ls-lint.yml
 
-    # TODO: Add proper SQL linting instead of just filename linting
+      - name: Run sqlfluff
+        uses: sqlfluff/sqlfluff-github-actions@main
+        with:
+          config: .sqlfluff
+          paths: backend/migrations
