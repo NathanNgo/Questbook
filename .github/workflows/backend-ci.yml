@@ -10,12 +10,13 @@ on:
     paths:
       - 'backend/**'
 
+permissions:
+    contents: read
+
 jobs:
   lint-and-format:
     name: Lint and Format Go
     runs-on: ubuntu-latest
-    permissions:
-        contents: read
     
     defaults:
       run:
@@ -53,6 +54,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.14'
+          cache: 'pip'
 
       - name: Install SQLFluff
         run: pip install sqlfluff==4.1.0
