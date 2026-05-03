@@ -10,12 +10,13 @@ on:
     paths:
       - 'frontend/**'
 
+permissions:
+    contents: read
+
 jobs:
   lint-and-format:
     name: Lint and Format TypeScript
     runs-on: ubuntu-latest
-    permissions:
-        contents: read
 
     defaults:
       run:
@@ -46,8 +47,6 @@ jobs:
   typecheck:
     name: Typecheck Typescript
     runs-on: ubuntu-latest
-    permissions:
-        contents: read
 
     defaults:
       run:
