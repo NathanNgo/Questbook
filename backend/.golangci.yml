@@ -14,3 +14,13 @@ formatters:
     goimports:
       local-prefixes:
         - github.com/NathanNgo/Questbook/backend
+
+output:
+  formats:
+    - name: text
+      path: stdout
+      settings:
+        print-issued-lines: true
+        print-linter-name: true
+    - name: github-actions
+      path: stdout
