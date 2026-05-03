@@ -1,6 +1,6 @@
 CREATE TABLE comments (
     id SERIAL PRIMARY KEY,
-    session_id INTEGER NOT NULL REFERENCES sessions (id) ON DELETE CASCADE,
+    session_id INTEGER NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
     text_content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
