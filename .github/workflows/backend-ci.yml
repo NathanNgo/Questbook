@@ -41,3 +41,4 @@ jobs:
         with:
           version: latest
           working-directory: backend
+          install-mode: goinstall
