@@ -1,7 +1,7 @@
 import { useId, useState } from "react";
-import styles from "./SessionListItem.module.css";
 import { useChangeSessionNameMutation } from "../api/mutations";
 import type { Session } from "../api/types";
+import styles from "./SessionListItem.module.css";
 
 interface SessionListItemProps {
     session: Session;
@@ -60,7 +60,6 @@ export default function SessionListItem({
             >
                 <input
                     className={styles.sessionNameInput}
-                    autoFocus
                     type="text"
                     value={sessionNameInputValue}
                     onChange={(e) => setSessionNameInputValue(e.target.value)}
@@ -82,14 +81,18 @@ export default function SessionListItem({
             >
                 {session.sessionName}
             </p>
-            <button onClick={handleStartEditingName}>✏️</button>
+            <button type="button" onClick={handleStartEditingName}>
+                ✏️
+            </button>
         </>
     );
 
     return (
         <div className={styles.sessionListItem}>
             {isEditingName ? sessionNameEditView : sessionNameDisplayView}
-            <button onClick={handleDeleteSession}>🗑️</button>
+            <button type="submit" onClick={handleDeleteSession}>
+                🗑️
+            </button>
         </div>
     );
 }

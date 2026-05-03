@@ -21,16 +21,14 @@ export default function SessionCreation() {
     }
 
     return (
-        <>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    onChange={handleChange}
-                    value={sessionName}
-                    placeholder="How ya doin'?"
-                />
-                <button type="submit"> Submit </button>
-            </form>
-        </>
+        <form onSubmit={handleSubmit}>
+            <input
+                type="text"
+                onChange={handleChange}
+                value={sessionName}
+                placeholder="How ya doin'?"
+            />
+            <button type="submit"> Submit </button>
+        </form>
     );
 }

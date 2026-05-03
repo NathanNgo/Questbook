@@ -23,7 +23,7 @@ type CreateSessionRequest struct {
 }
 
 type CreateSessionResponse struct {
-	Id string `json:"id"`
+	Id          string `json:"id"`
 	SessionName string `json:"sessionName"`
 }
 
@@ -36,7 +36,7 @@ func (handler *SessionHandler) CreateSession(
 	decoder.DisallowUnknownFields()
 
 	if err := decoder.Decode(&sessionRequest); err != nil {
-		http.Error (writer, "Invalid JSON payload", http.StatusBadRequest)
+		http.Error(writer, "Invalid JSON payload", http.StatusBadRequest)
 		return
 	}
 
@@ -55,7 +55,7 @@ func (handler *SessionHandler) CreateSession(
 }
 
 type GetAllSessionsResponseObject struct {
-	Id string `json:"id"`
+	Id          string `json:"id"`
 	SessionName string `json:"sessionName"`
 }
 
@@ -79,12 +79,11 @@ func (handler *SessionHandler) GetAllSessions(
 		}
 		sessions = append(sessions, session)
 	}
-  
+
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(http.StatusOK)
 	json.NewEncoder(writer).Encode(sessions)
 }
-
 
 type GetSessionResponse struct {
 	SessionName string `json:"id"`
@@ -116,12 +115,12 @@ func (handler *SessionHandler) GetSession(
 }
 
 type DeleteSessionResponse struct {
-	Id string `json:"id"`
+	Id          string `json:"id"`
 	SessionName string `json:"sessionName"`
 }
 
 func (handler *SessionHandler) DeleteSession(
-	writer http.ResponseWriter, request * http.Request,
+	writer http.ResponseWriter, request *http.Request,
 ) {
 	sessionId := request.PathValue("id")
 	if sessionId == "" {
@@ -147,27 +146,27 @@ type UpdateSessionRequest struct {
 }
 
 type UpdateSessionResponse struct {
-	Id string `json:"id"`
+	Id          string `json:"id"`
 	SessionName string `json:"sessionName"`
 }
 
 func (handler *SessionHandler) UpdateSession(
 	writer http.ResponseWriter, request *http.Request,
-){
+) {
 	var sessionRequest UpdateSessionRequest
 	var sessionResponse UpdateSessionResponse
 
 	sessionId := request.PathValue("id")
 	if sessionId == "" {
-		http.Error (writer, "ID is required", http.StatusBadRequest)
+		http.Error(writer, "ID is required", http.StatusBadRequest)
 		return
 	}
 
 	decoder := json.NewDecoder(request.Body)
 	decoder.DisallowUnknownFields()
 
-	if err := decoder.Decode(&sessionRequest); err != nil{
-		http.Error (writer, "Invalid JSON payload", http.StatusBadRequest)
+	if err := decoder.Decode(&sessionRequest); err != nil {
+		http.Error(writer, "Invalid JSON payload", http.StatusBadRequest)
 		return
 	}
 
@@ -186,11 +185,11 @@ func (handler *SessionHandler) UpdateSession(
 	`
 
 	err := handler.Database.QueryRow(
-		query, 
+		query,
 		sessionRequest.SessionName, sessionId,
-		).Scan(&sessionResponse.Id , &sessionResponse.SessionName)
-	
-	if err != nil{
+	).Scan(&sessionResponse.Id, &sessionResponse.SessionName)
+
+	if err != nil {
 		http.Error(writer, "Database Error", http.StatusInternalServerError)
 		return
 	}
