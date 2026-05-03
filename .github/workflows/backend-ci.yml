@@ -36,3 +36,14 @@ jobs:
         with:
           version: v2.12.0
           working-directory: backend
+
+  lint-sql:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+    
+      - name: Run ls-lint
+        uses: loeffel-io/ls-lint-action@v2
+
+    # TODO: Add proper SQL linting instead of just filename linting
