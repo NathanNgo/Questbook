@@ -1,12 +1,15 @@
+version: "2"
+
 linters:
+  default: standard
+
+formatters:
   enable:
     - gofumpt
     - goimports
-  disable:
-    - gofmt
-
-linters-settings:
-  gofumpt:
-    extra-rules: true
-  goimports:
-    local-prefixes: github.com/NathanNgo/Questbook/backend
+    - swaggo
+  settings:
+    gofumpt:
+      extra-rules: true
+    goimports:
+      local-prefixes: github.com/NathanNgo/Questbook/backend
