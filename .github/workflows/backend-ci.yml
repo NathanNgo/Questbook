@@ -45,6 +45,6 @@ jobs:
         uses: actions/checkout@v4
     
       - name: Run ls-lint
-        uses: loeffel-io/ls-lint-action@v2
+        uses: ls-lint/action@v2
 
     # TODO: Add proper SQL linting instead of just filename linting
