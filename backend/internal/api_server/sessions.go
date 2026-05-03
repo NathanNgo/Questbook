@@ -111,7 +111,6 @@ func (handler *SessionHandler) GetSession(
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(http.StatusOK)
 	json.NewEncoder(writer).Encode(sessionResponse)
-
 }
 
 type DeleteSessionResponse struct {
@@ -188,7 +187,6 @@ func (handler *SessionHandler) UpdateSession(
 		query,
 		sessionRequest.SessionName, sessionId,
 	).Scan(&sessionResponse.Id, &sessionResponse.SessionName)
-
 	if err != nil {
 		http.Error(writer, "Database Error", http.StatusInternalServerError)
 		return
