@@ -50,8 +50,12 @@ jobs:
           workdir: backend
           config: backend/.ls-lint.yml
 
-      - name: Run sqlfluff
-        uses: sqlfluff/sqlfluff-github-actions@main
+      - uses: actions/setup-python@v6
         with:
-          config: .sqlfluff
-          paths: backend/migrations
+          python-version: '3.14'
+
+      - name: Install SQLFluff
+        run: pip install sqlfluff==4.1.0
+
+      - name: Run SQLFluff
+        run: sqlfluff lint backend/migrations --config backend/.sqlfluff --format github-annotation-native
