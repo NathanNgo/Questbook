@@ -1,12 +1,10 @@
 name: Backend CI
 
 on:
-  # Triggers when a PR is merged into main
   push:
     branches: [ "main" ]
     paths:
       - 'backend/**'
-  # Triggers when a PR is opened/updated against main
   pull_request:
     branches: [ "main" ]
     paths:
@@ -17,7 +15,6 @@ jobs:
     name: Lint and Format Go
     runs-on: ubuntu-latest
     
-    # Force every step in this job to run inside the backend folder
     defaults:
       run:
         working-directory: ./backend
