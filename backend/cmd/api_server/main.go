@@ -14,6 +14,9 @@ import (
 const defaultServerPort = ":8080"
 
 func corsMiddleware(multiplexer http.Handler) http.Handler {
+
+
+
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		writer.Header().Set("Access-Control-Allow-Origin", "*")
 
@@ -37,8 +40,7 @@ func main() {
 
 	database, err := sql.Open("pgx", databaseURL)
 	if err != nil {
-		log.Fatalf("Error opening database: %v", err)
-	}
+		log.Fatalf("Error opening database: %v", err) }
 	defer database.Close()
 
 	if err := database.Ping(); err != nil {
