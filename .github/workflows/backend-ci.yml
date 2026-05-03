@@ -47,7 +47,6 @@ jobs:
       - name: Run ls-lint
         uses: ls-lint/action@v2
         with:
-          version: v2.12.0
           workdir: backend
           config: backend/.ls-lint.yml
 
