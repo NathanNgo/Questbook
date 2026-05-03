@@ -36,3 +36,4 @@ jobs:
         with:
           version: v2.12.0
           working-directory: backend
+          args: --out-format=github-check --print-issued-lines=true --print-linter-name=true
