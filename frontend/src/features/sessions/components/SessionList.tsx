@@ -4,9 +4,9 @@ import { useDeleteSessionMutation } from "../api/mutations";
 import { sessionsQueryOptions } from "../api/queries";
 import type { Session } from "../api/types";
 import styles from "./SessionList.module.css";
-import SessionListItem from "./SessionListItem";
+import { SessionListItem } from "./SessionListItem";
 
-export default function SessionList() {
+export function SessionList() {
     const { data: sessions } = useSuspenseQuery(sessionsQueryOptions());
     const { mutate } = useDeleteSessionMutation();
 

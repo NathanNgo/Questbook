@@ -8,7 +8,7 @@ interface SessionListItemProps {
     onDeleteSession: (session: Session) => void;
 }
 
-export default function SessionListItem({
+export function SessionListItem({
     session,
     onDeleteSession,
 }: SessionListItemProps) {

@@ -36,18 +36,22 @@ func main() {
 	}
 
 	database, err := sql.Open("pgx", databaseURL)
-		if err != nil {
-			log.Fatalf("Error opening database: %v", err)
-		}
-	defer database.Close()
-
-	if err := database.Ping(); err != nil {
-		log.Fatalf("Cannot reach datbase: %v", err)
+	if err != nil {
+		log.Fatalf("Error opening database: %v", err)
 	}
 
+	defer func() {
+		if err := database.Close(); err != nil {
+			log.Printf("Error closing database: %v", err)
+		}
+	}()
+
+	if err := database.Ping(); err != nil {
+		log.Fatalf("Cannot reach database: %v", err)
+	}
 	multiplexer := http.NewServeMux()
 
-	var sessionHandler *apiserver.SessionHandler = new(apiserver.SessionHandler)
+	sessionHandler := new(apiserver.SessionHandler)
 	sessionHandler.Database = database
 
 	sessionHandler.RegisterRoutes(multiplexer)

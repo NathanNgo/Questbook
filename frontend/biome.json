@@ -45,7 +45,11 @@
                     "options": {
                         "strictCase": true,
                         "requireAscii": true,
-                        "filenameCases": ["camelCase", "PascalCase"]
+                        "filenameCases": [
+                            "camelCase",
+                            "PascalCase",
+                            "kebab-case"
+                        ]
                     }
                 },
                 "useConsistentBuiltinInstantiation": "error",
@@ -53,5 +57,17 @@
                 "noParameterAssign": "error"
             }
         }
-    }
+    },
+    "overrides": [
+        {
+            "includes": ["*.config.ts", "*.config.js", "src/integrations/**"],
+            "linter": {
+                "rules": {
+                    "style": {
+                        "noDefaultExport": "off"
+                    }
+                }
+            }
+        }
+    ]
 }

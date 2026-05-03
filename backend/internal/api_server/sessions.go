@@ -3,6 +3,7 @@ package api_server
 import (
 	"database/sql"
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -51,7 +52,9 @@ func (handler *SessionHandler) CreateSession(
 
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(http.StatusCreated)
-	json.NewEncoder(writer).Encode(sessionResponse)
+	if err := json.NewEncoder(writer).Encode(sessionResponse); err != nil {
+		log.Printf("CreateSession failed to encode response")
+	}
 }
 
 type GetAllSessionsResponseObject struct {
@@ -69,7 +72,11 @@ func (handler *SessionHandler) GetAllSessions(
 		http.Error(writer, "Query failed", http.StatusInternalServerError)
 		return
 	}
-	defer rows.Close()
+	defer func() {
+		if err := rows.Close(); err != nil {
+			log.Printf("GetAllSessions: failed to close rows: %v", err)
+		}
+	}()
 
 	sessions := GetAllSessionsResponse{}
 	for rows.Next() {
@@ -82,7 +89,9 @@ func (handler *SessionHandler) GetAllSessions(
 
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(sessions)
+	if err := json.NewEncoder(writer).Encode(sessions); err != nil {
+		log.Printf("GetAllSessions failed to encode response")
+	}
 }
 
 type GetSessionResponse struct {
@@ -95,6 +104,7 @@ func (handler *SessionHandler) GetSession(
 	sessionId := request.PathValue("id")
 	if sessionId == "" {
 		http.Error(writer, "Id is required", http.StatusBadRequest)
+		return
 	}
 
 	var sessionResponse GetSessionResponse
@@ -110,7 +120,9 @@ func (handler *SessionHandler) GetSession(
 
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(sessionResponse)
+	if err := json.NewEncoder(writer).Encode(sessionResponse); err != nil {
+		log.Printf("GetSession failed to encode response")
+	}
 }
 
 type DeleteSessionResponse struct {
@@ -124,6 +136,7 @@ func (handler *SessionHandler) DeleteSession(
 	sessionId := request.PathValue("id")
 	if sessionId == "" {
 		http.Error(writer, "Id is required", http.StatusBadRequest)
+		return
 	}
 
 	var sessionResponse DeleteSessionResponse
@@ -133,11 +146,14 @@ func (handler *SessionHandler) DeleteSession(
 	).Scan(&sessionResponse.Id, &sessionResponse.SessionName)
 	if err != nil {
 		http.Error(writer, "Query failed", http.StatusInternalServerError)
+		return
 	}
 
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(sessionResponse)
+	if err := json.NewEncoder(writer).Encode(sessionResponse); err != nil {
+		log.Printf("DeleteSession failed to encode response")
+	}
 }
 
 type UpdateSessionRequest struct {
@@ -169,7 +185,6 @@ func (handler *SessionHandler) UpdateSession(
 		return
 	}
 
-	// Check if all non-id fields are nil (if so, nothing to update)
 	if sessionRequest.SessionName == nil {
 		http.Error(writer, "No fields to update", http.StatusBadRequest)
 		return
@@ -194,5 +209,7 @@ func (handler *SessionHandler) UpdateSession(
 
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(sessionResponse)
+	if err := json.NewEncoder(writer).Encode(sessionResponse); err != nil {
+		log.Printf("UpdateSession failed to encode response")
+	}
 }
