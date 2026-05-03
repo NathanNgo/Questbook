@@ -38,6 +38,7 @@ jobs:
           working-directory: backend
 
   lint-sql:
+    name: Lint and Format SQL
     runs-on: ubuntu-latest
     steps:
       - name: Check out code

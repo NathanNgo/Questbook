@@ -1,6 +1,8 @@
 ls:
   backend/migrations:
     .sql: snake_case
+    .up.sql: snake_case
+    .down.sql: snake_case
 
 ignore:
   - .git
