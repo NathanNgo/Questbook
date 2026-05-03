@@ -36,4 +36,8 @@ jobs:
         with:
           version: v2.12.0
           working-directory: backend
-          args: --format=github-check
+          args: >
+            --output.text.path=stdout
+            --output.text.print-linter-name=true
+            --output.text.print-issued-lines=true
+            --output.text.colors=true
