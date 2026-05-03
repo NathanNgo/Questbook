@@ -36,9 +36,9 @@ func main() {
 	}
 
 	database, err := sql.Open("pgx", databaseURL)
-	if err != nil {
-		log.Fatalf("Error opening database: %v", err)
-	}
+		if err != nil {
+			log.Fatalf("Error opening database: %v", err)
+		}
 	defer database.Close()
 
 	if err := database.Ping(); err != nil {
