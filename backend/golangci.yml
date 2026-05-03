@@ -1,0 +1,9 @@
+linters:
+  enable:
+    - gofumpt
+  disable:
+    - gofmt
+
+linters-settings:
+  gofumpt:
+    extra-rules: true
