@@ -22,7 +22,6 @@ output:
     - severity
     - file
   show-stats: true
-  
   formats:
     text:
       path: stdout
