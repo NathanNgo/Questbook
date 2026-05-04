@@ -36,7 +36,7 @@ jobs:
           version: 2.4.5
 
       - name: Run Biome Check (Linting and Formatting)
-        run: biome ci . --report=github
+        run: biome ci . --reporter=github
       
   typecheck:
     name: Typecheck Typescript
