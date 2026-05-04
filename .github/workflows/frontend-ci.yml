@@ -36,7 +36,10 @@ jobs:
           version: 2.4.5
 
       - name: Run Biome Check (Linting and Formatting)
-        run: biome ci . --reporter=github
+        run: biome ci . --colors=force --error-on-warnings
+        # There is a bug in biome where it doesn't run GitHub PR annotations
+        # when using a nested directory. https://github.com/biomejs/biome/issues/5447
+        # Our solution is to make it more human readable for now.
       
   typecheck:
     name: Typecheck Typescript
