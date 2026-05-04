@@ -22,6 +22,10 @@ jobs:
     name: Lint and Format TypeScript
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./frontend
+
     steps:
       - name: Check out code
         uses: actions/checkout@v4
