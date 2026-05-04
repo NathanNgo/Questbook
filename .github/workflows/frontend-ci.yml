@@ -12,8 +12,6 @@ on:
 
 permissions:
     contents: read
-    pull-requests: write
-    checks: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -38,7 +36,7 @@ jobs:
           version: 2.4.5
 
       - name: Run Biome Check (Linting and Formatting)
-        run: biome ci ./frontend
+        run: biome ci .
       
   typecheck:
     name: Typecheck Typescript
