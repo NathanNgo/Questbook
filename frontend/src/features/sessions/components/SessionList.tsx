@@ -1,35 +1,34 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { sessionsQueryOptions } from "../api/queries";
-import { useDeleteSessionMutation } from "../api/mutations";
-import SessionListItem from "./SessionListItem";
+import { sortByNumericValue } from "#/shared/utils/sortBy";
 import type { Session } from "../api/types";
 import styles from "./SessionList.module.css";
-import { sortByNumericValue } from "#/shared/utils/sortBy";
+import { SessionListItem } from "./SessionListItem";
 
-interface SessionListProps {
-    color?: string;
+export interface SessionListProps {
+	sessions: Session[];
+	onDeleteSession: (session: Session) => void;
+	onChangeSessionName: (session: Session, newSessionName: string) => void;
 }
 
-export default function SessionList({ color = "black" }: SessionListProps) {
-    const { data: sessions } = useSuspenseQuery(sessionsQueryOptions());
-    const { mutate } = useDeleteSessionMutation();
-
-    function handleDeleteSession(session: Session) {
-        mutate(session.id);
-    }
-
-    return (
-        <div className={styles.sessionList}>
-            {/*TODO: Give session a proper type*/}
-            {(sessions as Session[])
-                .sort(sortByNumericValue((session) => session.id))
-                .map((session) => (
-                    <SessionListItem
-                        session={session}
-                        onDeleteSession={handleDeleteSession}
-                        key={session.id}
-                    />
-                ))}
-        </div>
-    );
+export function SessionList({
+	sessions,
+	onDeleteSession,
+	onChangeSessionName,
+}: SessionListProps) {
+	return (
+		<div className={styles.sessionList}>
+			{/*TODO: Give session a proper type*/}
+			{(sessions as Session[])
+				.sort(sortByNumericValue((session) => parseInt(session.id)))
+				.map((session) => (
+					<SessionListItem
+						session={session}
+						onDelete={() => onDeleteSession(session)}
+						onChangeName={(newSessionName: string) =>
+							onChangeSessionName(session, newSessionName)
+						}
+						key={session.id}
+					/>
+				))}
+		</div>
+	);
 }

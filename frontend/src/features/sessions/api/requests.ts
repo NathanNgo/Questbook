@@ -1,8 +1,9 @@
 import type { CreateSessionPayload, UpdateSessionPayload } from "./payloads";
+import type { Session } from "./types";
 
 const BASE_URL = "http://localhost:8080";
 
-export async function fetchSessions() {
+export async function fetchSessions(): Promise<Session[]> {
     const response = await fetch(`${BASE_URL}/sessions`);
     if (!response.ok) {
         throw new Error("Failed to fetch Questbook sessions");
@@ -27,7 +28,7 @@ export async function createSession(payload: CreateSessionPayload) {
     return response.json();
 }
 
-export async function deleteSession(sessionId: number) {
+export async function deleteSession(sessionId: string) {
     const response = await fetch(`${BASE_URL}/sessions/${sessionId}`, {
         method: "DELETE",
     });
@@ -40,7 +41,7 @@ export async function deleteSession(sessionId: number) {
 }
 
 export async function updateSession(
-    sessionId: number,
+    sessionId: string,
     payload: UpdateSessionPayload,
 ) {
     const response = await fetch(`${BASE_URL}/sessions/${sessionId}`, {

@@ -12,7 +12,9 @@
     "test": "vitest run",
     "format": "biome format",
     "lint": "biome lint",
-    "check": "biome check"
+    "check": "biome check",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@tanstack/react-devtools": "latest",
@@ -40,7 +42,9 @@
     "jsdom": "^28.1.0",
     "typescript": "^5.7.2",
     "vite": "^8.0.0",
-    "vitest": "^3.0.5"
+    "vitest": "^3.0.5",
+    "storybook": "^10.3.6",
+    "@storybook/react-vite": "^10.3.6"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
