@@ -33,7 +33,7 @@ jobs:
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
         with:
-          version: latest
+          version: 2.4.5
 
       - name: Run Biome Check (Linting and Formatting)
         run: biome check .
