@@ -1,0 +1,30 @@
+version: "2"
+
+linters:
+  default: standard
+
+formatters:
+  enable:
+    - gofumpt
+    - goimports
+    - swaggo
+  settings:
+    gofumpt:
+      extra-rules: true
+    goimports:
+      local-prefixes:
+        - github.com/NathanNgo/Questbook/backend
+
+output:
+  path-mode: "abs"
+  sort-order:
+    - linter
+    - severity
+    - file
+  show-stats: true
+  formats:
+    text:
+      path: stdout
+      print-linter-name: true
+      print-issued-lines: true
+      colors: true

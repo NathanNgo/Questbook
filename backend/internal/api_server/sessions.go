@@ -3,6 +3,7 @@ package api_server
 import (
 	"database/sql"
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -23,7 +24,7 @@ type CreateSessionRequest struct {
 }
 
 type CreateSessionResponse struct {
-	Id string `json:"id"`
+	Id          string `json:"id"`
 	SessionName string `json:"sessionName"`
 }
 
@@ -36,7 +37,7 @@ func (handler *SessionHandler) CreateSession(
 	decoder.DisallowUnknownFields()
 
 	if err := decoder.Decode(&sessionRequest); err != nil {
-		http.Error (writer, "Invalid JSON payload", http.StatusBadRequest)
+		http.Error(writer, "Invalid JSON payload", http.StatusBadRequest)
 		return
 	}
 
@@ -51,11 +52,13 @@ func (handler *SessionHandler) CreateSession(
 
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(http.StatusCreated)
-	json.NewEncoder(writer).Encode(sessionResponse)
+	if err := json.NewEncoder(writer).Encode(sessionResponse); err != nil {
+		log.Printf("CreateSession failed to encode response")
+	}
 }
 
 type GetAllSessionsResponseObject struct {
-	Id string `json:"id"`
+	Id          string `json:"id"`
 	SessionName string `json:"sessionName"`
 }
 
@@ -69,7 +72,11 @@ func (handler *SessionHandler) GetAllSessions(
 		http.Error(writer, "Query failed", http.StatusInternalServerError)
 		return
 	}
-	defer rows.Close()
+	defer func() {
+		if err := rows.Close(); err != nil {
+			log.Printf("GetAllSessions: failed to close rows: %v", err)
+		}
+	}()
 
 	sessions := GetAllSessionsResponse{}
 	for rows.Next() {
@@ -79,12 +86,13 @@ func (handler *SessionHandler) GetAllSessions(
 		}
 		sessions = append(sessions, session)
 	}
-  
+
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(sessions)
+	if err := json.NewEncoder(writer).Encode(sessions); err != nil {
+		log.Printf("GetAllSessions failed to encode response")
+	}
 }
-
 
 type GetSessionResponse struct {
 	SessionName string `json:"id"`
@@ -96,6 +104,7 @@ func (handler *SessionHandler) GetSession(
 	sessionId := request.PathValue("id")
 	if sessionId == "" {
 		http.Error(writer, "Id is required", http.StatusBadRequest)
+		return
 	}
 
 	var sessionResponse GetSessionResponse
@@ -111,21 +120,23 @@ func (handler *SessionHandler) GetSession(
 
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(sessionResponse)
-
+	if err := json.NewEncoder(writer).Encode(sessionResponse); err != nil {
+		log.Printf("GetSession failed to encode response")
+	}
 }
 
 type DeleteSessionResponse struct {
-	Id string `json:"id"`
+	Id          string `json:"id"`
 	SessionName string `json:"sessionName"`
 }
 
 func (handler *SessionHandler) DeleteSession(
-	writer http.ResponseWriter, request * http.Request,
+	writer http.ResponseWriter, request *http.Request,
 ) {
 	sessionId := request.PathValue("id")
 	if sessionId == "" {
 		http.Error(writer, "Id is required", http.StatusBadRequest)
+		return
 	}
 
 	var sessionResponse DeleteSessionResponse
@@ -135,11 +146,14 @@ func (handler *SessionHandler) DeleteSession(
 	).Scan(&sessionResponse.Id, &sessionResponse.SessionName)
 	if err != nil {
 		http.Error(writer, "Query failed", http.StatusInternalServerError)
+		return
 	}
 
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(sessionResponse)
+	if err := json.NewEncoder(writer).Encode(sessionResponse); err != nil {
+		log.Printf("DeleteSession failed to encode response")
+	}
 }
 
 type UpdateSessionRequest struct {
@@ -147,31 +161,30 @@ type UpdateSessionRequest struct {
 }
 
 type UpdateSessionResponse struct {
-	Id string `json:"id"`
+	Id          string `json:"id"`
 	SessionName string `json:"sessionName"`
 }
 
 func (handler *SessionHandler) UpdateSession(
 	writer http.ResponseWriter, request *http.Request,
-){
+) {
 	var sessionRequest UpdateSessionRequest
 	var sessionResponse UpdateSessionResponse
 
 	sessionId := request.PathValue("id")
 	if sessionId == "" {
-		http.Error (writer, "ID is required", http.StatusBadRequest)
+		http.Error(writer, "ID is required", http.StatusBadRequest)
 		return
 	}
 
 	decoder := json.NewDecoder(request.Body)
 	decoder.DisallowUnknownFields()
 
-	if err := decoder.Decode(&sessionRequest); err != nil{
-		http.Error (writer, "Invalid JSON payload", http.StatusBadRequest)
+	if err := decoder.Decode(&sessionRequest); err != nil {
+		http.Error(writer, "Invalid JSON payload", http.StatusBadRequest)
 		return
 	}
 
-	// Check if all non-id fields are nil (if so, nothing to update)
 	if sessionRequest.SessionName == nil {
 		http.Error(writer, "No fields to update", http.StatusBadRequest)
 		return
@@ -186,16 +199,17 @@ func (handler *SessionHandler) UpdateSession(
 	`
 
 	err := handler.Database.QueryRow(
-		query, 
+		query,
 		sessionRequest.SessionName, sessionId,
-		).Scan(&sessionResponse.Id , &sessionResponse.SessionName)
-	
-	if err != nil{
+	).Scan(&sessionResponse.Id, &sessionResponse.SessionName)
+	if err != nil {
 		http.Error(writer, "Database Error", http.StatusInternalServerError)
 		return
 	}
 
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(sessionResponse)
+	if err := json.NewEncoder(writer).Encode(sessionResponse); err != nil {
+		log.Printf("UpdateSession failed to encode response")
+	}
 }

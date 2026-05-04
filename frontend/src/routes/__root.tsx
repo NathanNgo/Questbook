@@ -4,8 +4,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import {
     createRootRouteWithContext,
     HeadContent,
-    Scripts,
     Outlet,
+    Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
@@ -19,7 +19,10 @@ export const Route = createRootRouteWithContext<GlobalContext>()({
     head: () => ({
         meta: [
             { charSet: "utf-8" },
-            { name: "viewport", content: "width=device-width, initial-scale=1" },
+            {
+                name: "viewport",
+                content: "width=device-width, initial-scale=1",
+            },
             { title: "Questbook" },
         ],
         links: [{ rel: "stylesheet", href: appCss }],

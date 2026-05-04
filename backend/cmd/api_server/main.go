@@ -15,8 +15,8 @@ const defaultServerPort = ":8080"
 
 func corsMiddleware(multiplexer http.Handler) http.Handler {
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		writer.Header().Set("Access-Control-Allow-Origin", "*") 
-		
+		writer.Header().Set("Access-Control-Allow-Origin", "*")
+
 		writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE")
 		writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
@@ -39,16 +39,19 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error opening database: %v", err)
 	}
-	defer database.Close()
+
+	defer func() {
+		if err := database.Close(); err != nil {
+			log.Printf("Error closing database: %v", err)
+		}
+	}()
 
 	if err := database.Ping(); err != nil {
-		log.Fatalf("Cannot reach datbase: %v", err)
+		log.Fatalf("Cannot reach database: %v", err)
 	}
-
 	multiplexer := http.NewServeMux()
 
-	var sessionHandler *apiserver.SessionHandler
-	sessionHandler = new(apiserver.SessionHandler)
+	sessionHandler := new(apiserver.SessionHandler)
 	sessionHandler.Database = database
 
 	sessionHandler.RegisterRoutes(multiplexer)
