@@ -3,7 +3,7 @@ import { Button } from "#/shared/components/Button/Button";
 import type { Session } from "../api/types";
 import styles from "./SessionListItem.module.css";
 
-interface SessionListItemProps {
+export interface SessionListItemProps {
 	session: Session;
 	onDelete: () => void;
 	onChangeName: (newName: string) => void;
@@ -60,7 +60,7 @@ export function SessionListItem({
 			>
 				<input
 					className={styles.sessionNameInput}
-					// biome-ignore lint/a11y/noAutofocus: Input only appears when triggered by user action,we want the user start editing the name immediately
+					// biome-ignore lint/a11y/noAutofocus: Input only appears when triggered by user action, we want the user start editing the name immediately
 					autoFocus
 					type="text"
 					value={sessionNameInputValue}

@@ -5,6 +5,7 @@
     justify-content: space-between;
     box-sizing: content-box;
     padding: 10px;
+    align-items: center;
 }
 
 .sessionListItem:hover {
@@ -13,6 +14,7 @@
 
 .sessionNameInput {
     width: 200px;
+    box-sizing: border-box;
 }
 
 .sessionNameInputForm {
@@ -26,4 +28,5 @@
     overflow: hidden;
     text-overflow: ellipsis;
     text-wrap: nowrap;
+    margin: unset;
 }

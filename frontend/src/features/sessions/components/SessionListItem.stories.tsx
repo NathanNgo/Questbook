@@ -1,61 +1,41 @@
-// SessionListItem.stories.tsx
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
-import type { Session } from "../api/types";
-import { SessionListItem } from "./SessionListItem";
+import { fn } from "@storybook/test";
+import { SessionListItem, type SessionListItemProps } from "./SessionListItem";
 
-const meta: Meta<typeof SessionListItem> = {
-	title: "Components/SessionListItem",
+type CustomArgs = {
+	sessionName: string;
+};
+
+const meta: Meta<SessionListItemProps & CustomArgs> = {
 	component: SessionListItem,
+	title: "Components/Session/SessionListItem",
+	argTypes: {
+		session: {
+			table: { disable: true },
+		},
+		sessionName: {
+			control: "text",
+			description: "The name of the session",
+		},
+	},
+	render: (args) => (
+		<SessionListItem
+			session={{
+				id: "1",
+				sessionName: args.sessionName,
+			}}
+			onDelete={fn()}
+			onChangeName={fn()}
+		/>
+	),
 };
 
 export default meta;
 
-type Story = StoryObj<typeof SessionListItem>;
-
-/**
- * Interactive wrapper so Storybook can simulate real behavior
- */
-function StatefulWrapper(initialSession: Session) {
-	const [session, setSession] = useState(initialSession);
-
-	return (
-		<SessionListItem
-			session={session}
-			onDelete={() => {
-				alert(`Deleted session: ${session.sessionName}`);
-			}}
-			onChangeName={(newName) => {
-				setSession((prev) => ({
-					...prev,
-					sessionName: newName,
-				}));
-			}}
-		/>
-	);
-}
+type Story = StoryObj<SessionListItemProps & CustomArgs>;
 
 export const Default: Story = {
-	render: () =>
-		StatefulWrapper({
-			id: "1",
-			sessionName: "My First Session",
-		}),
-};
-
-export const LongName: Story = {
-	render: () =>
-		StatefulWrapper({
-			id: "2",
-			sessionName:
-				"Thisaasas is a very long session name to test overflow behavior",
-		}),
-};
-
-export const EmptyNameFallback: Story = {
-	render: () =>
-		StatefulWrapper({
-			id: "3",
-			sessionName: "",
-		}),
+	args: {
+		sessionName: "Name of the session",
+	},
 };
