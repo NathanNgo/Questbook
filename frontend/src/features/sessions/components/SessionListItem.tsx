@@ -4,100 +4,100 @@ import type { Session } from "../api/types";
 import styles from "./SessionListItem.module.css";
 
 export interface SessionListItemProps {
-	session: Session;
-	onDelete: () => void;
-	onChangeName: (newName: string) => void;
+    session: Session;
+    onDelete: () => void;
+    onChangeName: (newName: string) => void;
 }
 
 export function SessionListItem({
-	session,
-	onDelete,
-	onChangeName,
+    session,
+    onDelete,
+    onChangeName,
 }: SessionListItemProps) {
-	const [isEditingName, setIsEditingName] = useState(false);
-	const [sessionNameInputValue, setSessionNameInputValue] = useState(
-		session.sessionName,
-	);
+    const [isEditingName, setIsEditingName] = useState(false);
+    const [sessionNameInputValue, setSessionNameInputValue] = useState(
+        session.sessionName,
+    );
 
-	function handleStartEditingName(event: React.MouseEvent) {
-		event.preventDefault();
-		setIsEditingName(true);
-	}
+    function handleStartEditingName(event: React.MouseEvent) {
+        event.preventDefault();
+        setIsEditingName(true);
+    }
 
-	const nameEditButtonRef = useRef<HTMLButtonElement>(null);
+    const nameEditButtonRef = useRef<HTMLButtonElement>(null);
 
-	function handleSubmitSessionName(event?: React.SubmitEvent) {
-		if (event) event.preventDefault();
-		setIsEditingName(false);
-		nameEditButtonRef.current?.focus();
-		const newSessionName = sessionNameInputValue.trim();
-		if (!newSessionName) {
-			setSessionNameInputValue(session.sessionName);
-			return;
-		}
-		if (newSessionName === session.sessionName) {
-			return;
-		}
+    function handleSubmitSessionName(event?: React.SubmitEvent) {
+        if (event) event.preventDefault();
+        setIsEditingName(false);
+        nameEditButtonRef.current?.focus();
+        const newSessionName = sessionNameInputValue.trim();
+        if (!newSessionName) {
+            setSessionNameInputValue(session.sessionName);
+            return;
+        }
+        if (newSessionName === session.sessionName) {
+            return;
+        }
 
-		onChangeName(newSessionName);
-	}
+        onChangeName(newSessionName);
+    }
 
-	function handleSessionNameInputKeyDown(event: React.KeyboardEvent) {
-		if (event.key === "Escape") {
-			setIsEditingName(false);
-			setSessionNameInputValue(session.sessionName);
-		}
-	}
+    function handleSessionNameInputKeyDown(event: React.KeyboardEvent) {
+        if (event.key === "Escape") {
+            setIsEditingName(false);
+            setSessionNameInputValue(session.sessionName);
+        }
+    }
 
-	const formId = useId();
+    const formId = useId();
 
-	const sessionNameEditView = (
-		<>
-			<form
-				id={formId}
-				onSubmit={handleSubmitSessionName}
-				className={styles.sessionNameInputForm}
-			>
-				<input
-					className={styles.sessionNameInput}
-					// biome-ignore lint/a11y/noAutofocus: Input only appears when triggered by user action, we want the user start editing the name immediately
-					autoFocus
-					type="text"
-					value={sessionNameInputValue}
-					onChange={(e) => setSessionNameInputValue(e.target.value)}
-					placeholder="New session name..."
-					onKeyDown={handleSessionNameInputKeyDown}
-				/>
-			</form>
-			<Button
-				icon="✅"
-				buttonType="submit"
-				formId={formId}
-				ref={nameEditButtonRef}
-			/>
-		</>
-	);
+    const sessionNameEditView = (
+        <>
+            <form
+                id={formId}
+                onSubmit={handleSubmitSessionName}
+                className={styles.sessionNameInputForm}
+            >
+                <input
+                    className={styles.sessionNameInput}
+                    // biome-ignore lint/a11y/noAutofocus: Input only appears when triggered by user action, we want the user start editing the name immediately
+                    autoFocus
+                    type="text"
+                    value={sessionNameInputValue}
+                    onChange={(e) => setSessionNameInputValue(e.target.value)}
+                    placeholder="New session name..."
+                    onKeyDown={handleSessionNameInputKeyDown}
+                />
+            </form>
+            <Button
+                icon="✅"
+                buttonType="submit"
+                formId={formId}
+                ref={nameEditButtonRef}
+            />
+        </>
+    );
 
-	const sessionNameDisplayView = (
-		<>
-			<p
-				onDoubleClick={handleStartEditingName}
-				className={styles.sessionNameDisplay}
-			>
-				{session.sessionName}
-			</p>
-			<Button
-				icon="✏️"
-				onClick={handleStartEditingName}
-				ref={nameEditButtonRef}
-			/>
-		</>
-	);
+    const sessionNameDisplayView = (
+        <>
+            <p
+                onDoubleClick={handleStartEditingName}
+                className={styles.sessionNameDisplay}
+            >
+                {session.sessionName}
+            </p>
+            <Button
+                icon="✏️"
+                onClick={handleStartEditingName}
+                ref={nameEditButtonRef}
+            />
+        </>
+    );
 
-	return (
-		<div className={styles.sessionListItem}>
-			{isEditingName ? sessionNameEditView : sessionNameDisplayView}
-			<Button icon="🗑️" onClick={onDelete} />
-		</div>
-	);
+    return (
+        <div className={styles.sessionListItem}>
+            {isEditingName ? sessionNameEditView : sessionNameDisplayView}
+            <Button icon="🗑️" onClick={onDelete} />
+        </div>
+    );
 }

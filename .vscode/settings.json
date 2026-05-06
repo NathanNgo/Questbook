@@ -7,5 +7,7 @@
             "source.organizeImports.biome": "explicit"
         }
     },
-    "biome.lsp.bin": "frontend/node_modules/@biomejs/biome/bin/biome"
+    "biome.lsp.bin": "frontend/node_modules/@biomejs/biome/bin/biome",
+    "biome.configurationPath": "frontend/biome.json",
+    "biome.enabled": true
 }

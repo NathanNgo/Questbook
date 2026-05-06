@@ -3,31 +3,31 @@ import { fn } from "@storybook/test";
 import { SessionListItem, type SessionListItemProps } from "./SessionListItem";
 
 type CustomArgs = {
-	sessionName: string;
+    sessionName: string;
 };
 
 const meta: Meta<SessionListItemProps & CustomArgs> = {
-	component: SessionListItem,
-	title: "Components/Session/SessionListItem",
-	argTypes: {
-		session: {
-			table: { disable: true },
-		},
-		sessionName: {
-			control: "text",
-			description: "The name of the session",
-		},
-	},
-	render: (args) => (
-		<SessionListItem
-			session={{
-				id: "1",
-				sessionName: args.sessionName,
-			}}
-			onDelete={fn()}
-			onChangeName={fn()}
-		/>
-	),
+    component: SessionListItem,
+    title: "Components/Session/SessionListItem",
+    argTypes: {
+        session: {
+            table: { disable: true },
+        },
+        sessionName: {
+            control: "text",
+            description: "The name of the session",
+        },
+    },
+    render: (args) => (
+        <SessionListItem
+            session={{
+                id: "1",
+                sessionName: args.sessionName,
+            }}
+            onDelete={fn()}
+            onChangeName={fn()}
+        />
+    ),
 };
 
 export default meta;
@@ -35,7 +35,7 @@ export default meta;
 type Story = StoryObj<SessionListItemProps & CustomArgs>;
 
 export const Default: Story = {
-	args: {
-		sessionName: "Name of the session",
-	},
+    args: {
+        sessionName: "Name of the session",
+    },
 };
