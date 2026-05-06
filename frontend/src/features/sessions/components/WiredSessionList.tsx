@@ -8,7 +8,7 @@ import { sessionsQueryOptions } from "../api/queries";
 import type { Session } from "../api/types";
 import { SessionList } from "./SessionList";
 
-export default function WiredSessionList() {
+export function WiredSessionList() {
     const { data: sessions } = useSuspenseQuery(sessionsQueryOptions());
     const { mutate: deleteSession } = useDeleteSessionMutation();
     const { mutate: changeSession } = useChangeSessionMutation();
