@@ -70,17 +70,13 @@
             }
         },
         {
-            "includes": ["*.config.ts", "*.config.js", "src/integrations/**"],
-            "linter": {
-                "rules": {
-                    "style": {
-                        "noDefaultExport": "off"
-                    }
-                }
-            }
-        },
-        {
-            "includes": ["**/*.stories.ts", "**/*.stories.tsx"],
+            "includes": [
+                "*.config.ts",
+                "*.config.js",
+                "src/integrations/**",
+                "**/*.stories.ts",
+                "**/*.stories.tsx"
+            ],
             "linter": {
                 "rules": {
                     "style": {
