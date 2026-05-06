@@ -12,7 +12,8 @@
     "test": "vitest run",
     "format": "biome format",
     "lint": "biome lint",
-    "check": "biome check"
+    "check": "biome check",
+    "generate:api": "openapi-typescript ${API_URL:-http://localhost:8080/swagger/doc.json} -o ./src/types/api.ts"
   },
   "dependencies": {
     "@tanstack/react-devtools": "latest",
@@ -38,6 +39,7 @@
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
     "jsdom": "^28.1.0",
+    "openapi-typescript": "^5.4.2",
     "typescript": "^5.7.2",
     "vite": "^8.0.0",
     "vitest": "^3.0.5"

@@ -8,7 +8,10 @@ import (
 
 	apiserver "github.com/NathanNgo/Questbook/backend/internal/api_server"
 
+	_ "github.com/NathanNgo/Questbook/backend/docs"
 	_ "github.com/jackc/pgx/v5/stdlib"
+
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 const defaultServerPort = ":8080"
@@ -60,6 +63,10 @@ func main() {
 	sessionHandler.RegisterRoutes(multiplexer)
 
 	wrappedHandler := corsMiddleware(multiplexer)
+
+	multiplexer.Handle("/swagger/", httpSwagger.Handler(
+		httpSwagger.URL("doc.json"),
+	))
 
 	log.Printf("Server started on port %s", defaultServerPort)
 
