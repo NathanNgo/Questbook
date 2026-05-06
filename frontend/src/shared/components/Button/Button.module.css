@@ -3,3 +3,9 @@
     width: fit-content;
     height: fit-content;
 }
+
+.icon {
+    width: 40px;
+    height: 40px;
+    padding: 0px;
+}

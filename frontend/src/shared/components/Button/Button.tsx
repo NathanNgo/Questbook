@@ -1,3 +1,4 @@
+import cx from "classnames";
 import styles from "./Button.module.css";
 
 interface ButtonProps {
@@ -21,12 +22,12 @@ export function Button({
 		<button
 			type={buttonType}
 			onClick={onClick}
-			className={styles.button}
+			className={cx(styles.button, { [styles.icon]: !!icon })}
 			form={formId}
 			ref={ref}
 		>
-			{" "}
 			{label}
+			{icon}
 		</button>
 	);
 }

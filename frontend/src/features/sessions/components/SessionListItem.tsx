@@ -70,7 +70,7 @@ export function SessionListItem({
 				/>
 			</form>
 			<Button
-				label="✅"
+				icon="✅"
 				buttonType="submit"
 				formId={formId}
 				ref={nameEditButtonRef}
@@ -87,7 +87,7 @@ export function SessionListItem({
 				{session.sessionName}
 			</p>
 			<Button
-				label="✏️"
+				icon="✏️"
 				onClick={handleStartEditingName}
 				ref={nameEditButtonRef}
 			/>
@@ -97,7 +97,7 @@ export function SessionListItem({
 	return (
 		<div className={styles.sessionListItem}>
 			{isEditingName ? sessionNameEditView : sessionNameDisplayView}
-			<Button label="🗑️" onClick={onDelete} />
+			<Button icon="🗑️" onClick={onDelete} />
 		</div>
 	);
 }
