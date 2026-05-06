@@ -8,8 +8,9 @@ import (
 
 	apiserver "github.com/NathanNgo/Questbook/backend/internal/api_server"
 
-	_ "github.com/NathanNgo/Questbook/backend/docs"
 	_ "github.com/jackc/pgx/v5/stdlib"
+
+	_ "github.com/NathanNgo/Questbook/backend/docs"
 
 	httpSwagger "github.com/swaggo/http-swagger"
 )
@@ -32,9 +33,9 @@ func corsMiddleware(multiplexer http.Handler) http.Handler {
 	})
 }
 
-// @title Questbook API Server
-// @version 1.0
-// @description API server for Questbook
+// @title			Questbook API Server
+// @version		1.0
+// @description	API server for Questbook
 func main() {
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
