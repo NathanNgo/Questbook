@@ -6,6 +6,10 @@ MAIN_COMPOSE_FILE=../docker-compose.yml
 migrate:
 	$(MIGRATE) -path $(MIGRATIONS_PABACKEND(MIGRATIONS_PATH) -database "$(DB_URL)" down 1
 
+migrate-down:
+	$(MIGRATE) -path $(MIGRATIONS_PATH) -database "$(DB_URL)" down 1
+	$(MIGRATE) -path $(MIGRATIONS_PABACKEND(MIGRATIONS_PATH) -database "$(DB_URL)" down 1
+
 new-migration:
 	@if [ -z "$(name)" ]; then echo "Error: name is required. Usage: make new-migration name=<name>"; exit 1; fi
 	@# Using $(MIGRATE) here keeps things consistent and uses the same tool version

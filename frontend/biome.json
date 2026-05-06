@@ -68,6 +68,12 @@
                     }
                 }
             }
+        },
+        {
+            "includes": ["src/types/api.ts"],
+            "linter": {
+                "enabled": false
+            }
         }
     ]
 }
