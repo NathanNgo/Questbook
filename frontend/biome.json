@@ -88,6 +88,21 @@
                     }
                 }
             }
+        },
+        {
+            "includes": ["**/*.tsx"],
+            "linter": {
+                "rules": {
+                    "complexity": {
+                        "noExcessiveLinesPerFunction": {
+                            "level": "error",
+                            "options": {
+                                "maxLines": 200
+                            }
+                        }
+                    }
+                }
+            }
         }
     ]
 }
