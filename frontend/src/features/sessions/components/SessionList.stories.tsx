@@ -67,7 +67,7 @@ export const WithLongNames: Story = {
             {
                 id: "2",
                 sessionName:
-                    "Another extremely long session name that might wrap or truncate",
+                    "Another extremely long session name that will truncate",
             },
         ]),
 };
