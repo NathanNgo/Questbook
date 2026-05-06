@@ -35,6 +35,12 @@ importers:
       lucide-react:
         specifier: ^0.545.0
         version: 0.545.0(react@19.2.5)
+      openapi-fetch:
+        specifier: ^0.17.0
+        version: 0.17.0
+      openapi-typescript-fetch:
+        specifier: ^2.2.1
+        version: 2.2.1
       react:
         specifier: ^19.2.0
         version: 19.2.5
@@ -1556,6 +1562,16 @@ packages:
 
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
+
+  openapi-fetch@0.17.0:
+    resolution: {integrity: sha512-PsbZR1wAPcG91eEthKhN+Zn92FMHxv+/faECIwjXdxfTODGSGegYv0sc1Olz+HYPvKOuoXfp+0pA2XVt2cI0Ig==}
+
+  openapi-typescript-fetch@2.2.1:
+    resolution: {integrity: sha512-aBp1cR5FTNxp4HA8bb2ST53aIqEiJgoOMyXiyzKi6YF7vogW8KkyyUQ1FeDz8D05uspxFrKvFbkVU2YiiKkULA==}
+    engines: {node: '>= 12.0.0', npm: '>= 7.0.0'}
+
+  openapi-typescript-helpers@0.1.0:
+    resolution: {integrity: sha512-OKTGPthhivLw/fHz6c3OPtg72vi86qaMlqbJuVJ23qOvQ+53uw1n7HdmkJFibloF7QEjDrDkzJiOJuockM/ljw==}
 
   openapi-typescript@5.4.2:
     resolution: {integrity: sha512-tHeRv39Yh7brqJpbUntdjtUaXrTHmC4saoyTLU/0J2I8LEFQYDXRLgnmWTMiMOB2GXugJiqHa5n9sAyd6BRqiA==}
@@ -3363,6 +3379,14 @@ snapshots:
   nth-check@2.1.1:
     dependencies:
       boolbase: 1.0.0
+
+  openapi-fetch@0.17.0:
+    dependencies:
+      openapi-typescript-helpers: 0.1.0
+
+  openapi-typescript-fetch@2.2.1: {}
+
+  openapi-typescript-helpers@0.1.0: {}
 
   openapi-typescript@5.4.2:
     dependencies:
