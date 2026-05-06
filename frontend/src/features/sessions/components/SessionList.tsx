@@ -16,7 +16,7 @@ export function SessionList({
 }: SessionListProps) {
     return (
         <div className={styles.sessionList}>
-            {/*TODO: Give session a proper type*/}
+            {/*TODO: Give session a proper type with OpenAPI*/}
             {(sessions as Session[])
                 .sort(sortByNumericValue((session) => parseInt(session.id)))
                 .map((session) => (

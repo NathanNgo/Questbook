@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "#/shared/components/Button/Button";
 import { useCreateSessionMutation } from "../api/mutations";
 
-export default function SessionCreation() {
+export function SessionCreation() {
     // Controlled State for Input
     const [sessionName, setSessionName] = useState("");
     const { mutate } = useCreateSessionMutation();

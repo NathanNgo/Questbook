@@ -12,7 +12,6 @@ export const Route = createFileRoute("/sessions")({
 
 function Sessions() {
     const imgElement = document.querySelector('img[alt="TanStack Devtools"]');
-    console.log(imgElement);
     imgElement?.setAttribute(
         "src",
         "https://d2hqr1s9kfm9jo.cloudfront.net/production/images/sales_agents/182/open-uri20191227-21339-td1tzo.profile.",
