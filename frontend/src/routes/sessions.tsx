@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { sessionsQueryOptions } from "#/features/sessions/api/queries";
 import { SessionCreation } from "#/features/sessions/components/SessionCreation";
-import { WiredSessionList } from "#/features/sessions/components/WiredSessionList";
+import { SessionList } from "#/features/sessions/components/SessionList";
 
 export const Route = createFileRoute("/sessions")({
     component: Sessions,
@@ -18,7 +18,7 @@ function Sessions() {
     );
     return (
         <>
-            <WiredSessionList />
+            <SessionList />
             <SessionCreation />
         </>
     );
