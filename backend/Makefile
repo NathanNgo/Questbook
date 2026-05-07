@@ -16,3 +16,7 @@ new-migration:
 
 database-login:
 	docker compose -f ../docker-compose.yml exec postgres psql $(DB_URL)
+
+generate-swagger-docs:
+	@echo "Generating swagger docs..."
+	swag init -g ./cmd/api_server/main.go --pd
