@@ -4,14 +4,16 @@ import styles from "./SessionList.module.css";
 import { SessionListItem } from "./SessionListItem";
 
 interface SessionListProp {
-    sessions: Session[],
-    onDeleteSession: (session: Session) => void,
-    onChangeSessionName: (sessionId: number, newSessionName: string) => void,
+    sessions: Session[];
+    onDeleteSession: (session: Session) => void;
+    onChangeSessionName: (sessionId: number, newSessionName: string) => void;
 }
 
-export function SessionList({sessions, onDeleteSession, onChangeSessionName}: SessionListProp) {
-
-
+export function SessionList({
+    sessions,
+    onDeleteSession,
+    onChangeSessionName,
+}: SessionListProp) {
     return (
         <div className={styles.sessionList}>
             {/*TODO: Give session a proper type with OpenAPI*/}

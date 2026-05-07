@@ -1,9 +1,9 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { sessionsQueryOptions } from "../queries";
 import {
     useChangeSessionMutation,
     useDeleteSessionMutation,
 } from "../mutations";
+import { sessionsQueryOptions } from "../queries";
 
 export function useSessions() {
     const { data: sessions } = useSuspenseQuery(sessionsQueryOptions());
