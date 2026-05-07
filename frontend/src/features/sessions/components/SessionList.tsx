@@ -1,17 +1,15 @@
-import { sortByNumericValue } from "#/shared/utils/sortBy";
-import type { Session } from "../api/types";
-import styles from "./SessionList.module.css";
-import { SessionListItem } from "./SessionListItem";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { sortByNumericValue } from "#/shared/utils/sortBy";
 import {
     useChangeSessionMutation,
     useDeleteSessionMutation,
 } from "../api/mutations";
 import { sessionsQueryOptions } from "../api/queries";
-
+import type { Session } from "../api/types";
+import styles from "./SessionList.module.css";
+import { SessionListItem } from "./SessionListItem";
 
 export function SessionList() {
-
     const { data: sessions } = useSuspenseQuery(sessionsQueryOptions());
     const { mutate: deleteSession } = useDeleteSessionMutation();
     const { mutate: changeSession } = useChangeSessionMutation();
