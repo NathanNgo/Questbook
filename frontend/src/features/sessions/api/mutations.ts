@@ -24,7 +24,7 @@ export function useDeleteSessionMutation() {
     });
 }
 
-export function useChangeSessionNameMutation() {
+export function useChangeSessionMutation() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({

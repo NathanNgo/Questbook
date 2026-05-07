@@ -1,17 +1,21 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { sortByNumericValue } from "#/shared/utils/sortBy";
-import { useDeleteSessionMutation } from "../api/mutations";
-import { sessionsQueryOptions } from "../api/queries";
 import type { Session } from "../api/types";
 import styles from "./SessionList.module.css";
 import { SessionListItem } from "./SessionListItem";
+import { useSessions } from "../api/hooks/useSessions";
 
 export function SessionList() {
-    const { data: sessions } = useSuspenseQuery(sessionsQueryOptions());
-    const { mutate } = useDeleteSessionMutation();
+    const { sessions, deleteSession, changeSession } = useSessions();
 
     function handleDeleteSession(session: Session) {
-        mutate(session.id);
+        deleteSession(session.id);
+    }
+
+    function handleChangeSessionName(
+        sessionId: number,
+        newSessionName: string,
+    ) {
+        changeSession({ sessionId, payload: { sessionName: newSessionName } });
     }
 
     return (
@@ -23,6 +27,9 @@ export function SessionList() {
                     <SessionListItem
                         session={session}
                         onDeleteSession={handleDeleteSession}
+                        onChangeSessionName={(newSessionName: string) =>
+                            handleChangeSessionName(session.id, newSessionName)
+                        }
                         key={session.id}
                     />
                 ))}

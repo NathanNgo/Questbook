@@ -1,22 +1,23 @@
 import { useId, useState } from "react";
-import { useChangeSessionNameMutation } from "../api/mutations";
+
 import type { Session } from "../api/types";
 import styles from "./SessionListItem.module.css";
 
 interface SessionListItemProps {
     session: Session;
     onDeleteSession: (session: Session) => void;
+    onChangeSessionName: (newSessionName: string) => void;
 }
 
 export function SessionListItem({
     session,
     onDeleteSession,
+    onChangeSessionName,
 }: SessionListItemProps) {
     const [isEditingName, setIsEditingName] = useState(false);
     const [sessionNameInputValue, setSessionNameInputValue] = useState(
         session.sessionName,
     );
-    const { mutate } = useChangeSessionNameMutation();
 
     const handleDeleteSession = () => onDeleteSession(session);
 
@@ -36,10 +37,7 @@ export function SessionListItem({
         if (newSessionName === session.sessionName) {
             return;
         }
-        mutate({
-            sessionId: session.id,
-            payload: { sessionName: newSessionName },
-        });
+        onChangeSessionName(newSessionName);
     }
 
     function handleSessionNameInputKeyDown(event: React.KeyboardEvent) {
