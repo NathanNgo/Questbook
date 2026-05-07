@@ -19,7 +19,7 @@ func (handler *SessionHandler) RegisterRoutes(multiplexer *http.ServeMux) {
 	multiplexer.HandleFunc("PATCH /sessions/{id}", handler.UpdateSession)
 }
 
-type CreateSessionRequest struct {
+type CreateSessionRequestPayload struct {
 	SessionName string `json:"sessionName"`
 }
 
@@ -28,10 +28,22 @@ type CreateSessionResponse struct {
 	SessionName string `json:"sessionName"`
 }
 
+// CreateSession godoc
+//
+//	@Summary		Create a new session
+//	@Description	Create a new session with the provided session name
+//	@Tags			sessions
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		CreateSessionRequestPayload	true	"Session details"
+//	@Success		201		{object}	CreateSessionResponse
+//	@Failure		400		{string}	string	"Invalid JSON payload"
+//	@Failure		500		{string}	string	"Database Error"
+//	@Router			/sessions [post]
 func (handler *SessionHandler) CreateSession(
 	writer http.ResponseWriter, request *http.Request,
 ) {
-	var sessionRequest CreateSessionRequest
+	var sessionRequest CreateSessionRequestPayload
 	var sessionResponse CreateSessionResponse
 	decoder := json.NewDecoder(request.Body)
 	decoder.DisallowUnknownFields()
@@ -64,6 +76,15 @@ type GetAllSessionsResponseObject struct {
 
 type GetAllSessionsResponse []GetAllSessionsResponseObject
 
+// GetAllSessions godoc
+//
+//	@Summary		Gets all sessions
+//	@Description	Get all currently stored sessions
+//	@Tags			sessions
+//	@Produce		json
+//	@Success		200	{array}		GetAllSessionsResponseObject
+//	@Failure		500	{string}	string	"Internal Error"
+//	@Router			/sessions [get]
 func (handler *SessionHandler) GetAllSessions(
 	writer http.ResponseWriter, request *http.Request,
 ) {
@@ -98,6 +119,17 @@ type GetSessionResponse struct {
 	SessionName string `json:"id"`
 }
 
+// GetSession godoc
+//
+//	@Summary		Gets a session by session ID
+//	@Description	Finds and returns a session object using an ID
+//	@Tags			sessions
+//	@Produce		json
+//	@Param			id	path		string	true	"Session ID"
+//	@Success		200	{object}	GetSessionResponse
+//	@Failure		400	{string}	string	"ID is required"
+//	@Failure		500	{object}	string	"Internal Error"
+//	@Router			/sessions/{id} [get]
 func (handler *SessionHandler) GetSession(
 	writer http.ResponseWriter, request *http.Request,
 ) {
@@ -130,6 +162,17 @@ type DeleteSessionResponse struct {
 	SessionName string `json:"sessionName"`
 }
 
+// DeleteSession godoc
+//
+//	@Summary		Deletes a session by session ID
+//	@Description	Deletes a session that matches a given ID
+//	@Tags			sessions
+//	@Produce		json
+//	@Param			id	path		string	true	"Session ID"
+//	@Success		200	{object}	DeleteSessionResponse
+//	@Failure		400	{string}	string	"ID is required"
+//	@Failure		500	{string}	string	"Internal Error"
+//	@Router			/sessions/{id} [delete]
 func (handler *SessionHandler) DeleteSession(
 	writer http.ResponseWriter, request *http.Request,
 ) {

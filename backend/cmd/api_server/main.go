@@ -9,6 +9,10 @@ import (
 	apiserver "github.com/NathanNgo/Questbook/backend/internal/api_server"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
+
+	_ "github.com/NathanNgo/Questbook/backend/docs"
+
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 const defaultServerPort = ":8080"
@@ -28,6 +32,10 @@ func corsMiddleware(multiplexer http.Handler) http.Handler {
 		multiplexer.ServeHTTP(writer, request)
 	})
 }
+
+//	@title			Questbook API Server
+//	@version		1.0
+//	@description	API server for Questbook
 
 func main() {
 	databaseURL := os.Getenv("DATABASE_URL")
@@ -57,6 +65,10 @@ func main() {
 	sessionHandler.RegisterRoutes(multiplexer)
 
 	wrappedHandler := corsMiddleware(multiplexer)
+
+	multiplexer.Handle("/swagger/", httpSwagger.Handler(
+		httpSwagger.URL("doc.json"),
+	))
 
 	log.Printf("Server started on port %s", defaultServerPort)
 
