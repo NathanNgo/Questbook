@@ -18,7 +18,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint-and-format:
+  lint-and-format-go:
     name: Lint and Format Go
     runs-on: ubuntu-latest
     
@@ -28,10 +28,10 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: '1.25.4'
           cache-dependency-path: backend/go.sum
@@ -42,12 +42,17 @@ jobs:
           version: v2.12.0
           working-directory: backend
 
-  lint-sql:
+  lint-and-format-sql:
     name: Lint and Format SQL
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
     
       - name: Run ls-lint
         uses: ls-lint/action@v2
@@ -63,4 +68,43 @@ jobs:
         run: pip install sqlfluff==4.1.0
 
       - name: Run SQLFluff
-        run: sqlfluff lint backend/migrations --config backend/.sqlfluff --format github-annotation-native
+        run: sqlfluff lint ./migrations --config .sqlfluff --format github-annotation-native
+
+  database-migration-check:
+    name: Database Migration Check
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    services:
+      postgres:
+        image: postgres:18.3-alpine
+        env:
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: questbook
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U admin -d testdb"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.25.4'
+          cache-dependency-path: backend/go.sum
+
+      - name: Run Migrations "Up"
+        run: make migrate
+
+      - name: Run Migrations "Down"
+        run: make migrate-down

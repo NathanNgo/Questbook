@@ -15,7 +15,7 @@ new-migration:
 	$(MIGRATE) create -ext sql -dir $(MIGRATIONS_PATH) -format unix "$(name)"
 
 database-login:
-	docker compose -f ../docker-compose.yml exec postgres psql $(DB_URL)
+	docker compose -f $(MAIN_COMPOSE_FILE) exec postgres psql $(DB_URL)
 
 generate-swagger-docs:
 	@echo "Generating swagger docs..."
