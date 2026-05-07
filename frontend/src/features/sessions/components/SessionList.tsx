@@ -2,21 +2,15 @@ import { sortByNumericValue } from "#/shared/utils/sortBy";
 import type { Session } from "../api/types";
 import styles from "./SessionList.module.css";
 import { SessionListItem } from "./SessionListItem";
-import { useSessions } from "../api/hooks/useSessions";
 
-export function SessionList() {
-    const { sessions, deleteSession, changeSession } = useSessions();
+interface SessionListProp {
+    sessions: Session[],
+    onDeleteSession: (session: Session) => void,
+    onChangeSessionName: (sessionId: number, newSessionName: string) => void,
+}
 
-    function handleDeleteSession(session: Session) {
-        deleteSession(session.id);
-    }
+export function SessionList({sessions, onDeleteSession, onChangeSessionName}: SessionListProp) {
 
-    function handleChangeSessionName(
-        sessionId: number,
-        newSessionName: string,
-    ) {
-        changeSession({ sessionId, payload: { sessionName: newSessionName } });
-    }
 
     return (
         <div className={styles.sessionList}>
@@ -26,9 +20,9 @@ export function SessionList() {
                 .map((session) => (
                     <SessionListItem
                         session={session}
-                        onDeleteSession={handleDeleteSession}
+                        onDeleteSession={() => onDeleteSession(session)}
                         onChangeSessionName={(newSessionName: string) =>
-                            handleChangeSessionName(session.id, newSessionName)
+                            onChangeSessionName(session.id, newSessionName)
                         }
                         key={session.id}
                     />

@@ -5,7 +5,7 @@ import styles from "./SessionListItem.module.css";
 
 interface SessionListItemProps {
     session: Session;
-    onDeleteSession: (session: Session) => void;
+    onDeleteSession: () => void;
     onChangeSessionName: (newSessionName: string) => void;
 }
 
@@ -18,8 +18,6 @@ export function SessionListItem({
     const [sessionNameInputValue, setSessionNameInputValue] = useState(
         session.sessionName,
     );
-
-    const handleDeleteSession = () => onDeleteSession(session);
 
     function handleStartEditingName(event: React.MouseEvent) {
         event.preventDefault();
@@ -59,6 +57,8 @@ export function SessionListItem({
                 <input
                     className={styles.sessionNameInput}
                     type="text"
+                    // biome-ignore lint/a11y/noAutofocus: This should only autofocus on user action (pressing the edit button)
+                    autoFocus
                     value={sessionNameInputValue}
                     onChange={(e) => setSessionNameInputValue(e.target.value)}
                     placeholder="New session name..."
@@ -88,7 +88,7 @@ export function SessionListItem({
     return (
         <div className={styles.sessionListItem}>
             {isEditingName ? sessionNameEditView : sessionNameDisplayView}
-            <button type="submit" onClick={handleDeleteSession}>
+            <button type="submit" onClick={onDeleteSession}>
                 🗑️
             </button>
         </div>
