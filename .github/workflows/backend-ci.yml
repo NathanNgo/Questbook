@@ -68,7 +68,7 @@ jobs:
         run: pip install sqlfluff==4.1.0
 
       - name: Run SQLFluff
-        run: sqlfluff lint ./migrations --config backend/.sqlfluff --format github-annotation-native
+        run: sqlfluff lint ./migrations --config .sqlfluff --format github-annotation-native
 
   database-migration-check:
     name: Database Migration Check
