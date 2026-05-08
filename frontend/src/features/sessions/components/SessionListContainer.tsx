@@ -1,5 +1,5 @@
-import { useSessions } from "../hooks/useSessions";
 import type { Session } from "../api/types";
+import { useSessions } from "../hooks/useSessions";
 import { SessionList } from "./SessionList";
 
 function SessionListContainer() {
