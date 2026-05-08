@@ -13,7 +13,7 @@ export function SessionList({
     sessions,
     onDeleteSession,
     onChangeSessionName,
-}: SessionListProp) {
+}: SessionListProps) {
     return (
         <div className={styles.sessionList}>
             {/*TODO: Give session a proper type with OpenAPI*/}
