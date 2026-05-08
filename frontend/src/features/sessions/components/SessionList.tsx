@@ -3,7 +3,7 @@ import type { Session } from "../api/types";
 import styles from "./SessionList.module.css";
 import { SessionListItem } from "./SessionListItem";
 
-interface SessionListProp {
+interface SessionListProps {
     sessions: Session[];
     onDeleteSession: (session: Session) => void;
     onChangeSessionName: (sessionId: number, newSessionName: string) => void;
