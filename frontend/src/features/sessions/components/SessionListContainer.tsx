@@ -1,4 +1,4 @@
-import { useSessions } from "../api/hooks/useSessions";
+import { useSessions } from "../hooks/useSessions";
 import type { Session } from "../api/types";
 import { SessionList } from "./SessionList";
 
