@@ -2,7 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import {
     useChangeSessionMutation,
     useDeleteSessionMutation,
-} from "../mutations";
+} from "../api/mutations";
 import { sessionsQueryOptions } from "../api/queries";
 
 export function useSessions() {
