@@ -3,11 +3,21 @@ package api_server
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/NathanNgo/Questbook/backend/internal/websocket_router"
+	"github.com/gorilla/websocket"
 )
+
+var upgrader = websocket.Upgrader{
+	ReadBufferSize: 1024,
+	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
 
 type SessionHandler struct {
 	Database *sql.DB
@@ -267,11 +277,21 @@ func (handler *SessionHandler) UpdateSession(
 func (handler *SessionHandler) WebsocketUpgradeSession(
 	writer http.ResponseWriter, request *http.Request,
 ) {
-	return
-
-	// Get path ID.
+	sessionId := request.PathValue("id")
+	if sessionId == "" {
+		http.Error(writer, "ID is required", http.StatusBadRequest)
+		return
+	}
 
 	// Upgrade to websocket Connection
+	conn, err := upgrader.Upgrade(writer, request, nil)
+	if err != nil {
+		http.Error(
+			writer, "Could not upgrade to websocket connection", http.StatusBadRequest,
+		)
+		return
+	}
 
 	// Send data.
+	conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf("Hello %s", sessionId)))
 }

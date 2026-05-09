@@ -21,7 +21,10 @@ func corsMiddleware(multiplexer http.Handler) http.Handler {
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		writer.Header().Set("Access-Control-Allow-Origin", "*")
 
-		writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE")
+		writer.Header().Set(
+			"Access-Control-Allow-Methods",
+			"GET, POST, OPTIONS, PUT, PATCH, DELETE",
+		)
 		writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
 		if request.Method == "OPTIONS" {
