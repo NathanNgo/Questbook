@@ -1,19 +1,19 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { sortByNumericValue } from "#/shared/utils/sortBy";
-import { useDeleteSessionMutation } from "../api/mutations";
-import { sessionsQueryOptions } from "../api/queries";
 import type { Session } from "../api/types";
 import styles from "./SessionList.module.css";
 import { SessionListItem } from "./SessionListItem";
 
-export function SessionList() {
-    const { data: sessions } = useSuspenseQuery(sessionsQueryOptions());
-    const { mutate } = useDeleteSessionMutation();
+interface SessionListProps {
+    sessions: Session[];
+    onDeleteSession: (session: Session) => void;
+    onChangeSessionName: (sessionId: number, newSessionName: string) => void;
+}
 
-    function handleDeleteSession(session: Session) {
-        mutate(session.id);
-    }
-
+export function SessionList({
+    sessions,
+    onDeleteSession,
+    onChangeSessionName,
+}: SessionListProps) {
     return (
         <div className={styles.sessionList}>
             {/*TODO: Give session a proper type with OpenAPI*/}
@@ -22,7 +22,10 @@ export function SessionList() {
                 .map((session) => (
                     <SessionListItem
                         session={session}
-                        onDeleteSession={handleDeleteSession}
+                        onDeleteSession={() => onDeleteSession(session)}
+                        onChangeSessionName={(newSessionName: string) =>
+                            onChangeSessionName(session.id, newSessionName)
+                        }
                         key={session.id}
                     />
                 ))}
