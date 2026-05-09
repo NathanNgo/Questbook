@@ -89,6 +89,33 @@ export interface paths {
                 };
             };
         };
+        /** Updates a session that matches a given ID */
+        patch: {
+            parameters: {
+                path: {
+                    /** Session ID */
+                    id: string;
+                };
+                body: {
+                    /** Session details */
+                    request: definitions["internal_api_server.UpdateSessionRequest"];
+                };
+            };
+            responses: {
+                /** OK */
+                200: {
+                    schema: definitions["internal_api_server.UpdateSessionResponse"];
+                };
+                /** Session ID is required */
+                400: {
+                    schema: string;
+                };
+                /** Internal Error */
+                500: {
+                    schema: string;
+                };
+            };
+        };
     };
 }
 
@@ -111,8 +138,15 @@ export interface definitions {
     "internal_api_server.GetSessionResponse": {
         id?: string;
     };
+    "internal_api_server.UpdateSessionRequest": {
+        sessionName?: string;
+    };
+    "internal_api_server.UpdateSessionResponse": {
+        id?: string;
+        sessionName?: string;
+    };
 }
 
-export type operations = {};
+export interface operations {}
 
-export type external = {};
+export interface external {}

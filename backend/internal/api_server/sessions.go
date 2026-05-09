@@ -208,6 +208,19 @@ type UpdateSessionResponse struct {
 	SessionName string `json:"sessionName"`
 }
 
+// UpdateSession godoc
+//
+//	@Summary		Updates a session by session ID
+//	@Description	Updates a session that matches a given ID
+//	@Tags			sessions
+//	@Produce		json
+//	@Accept			json
+//	@Param			id		path		string					true	"Session ID"
+//	@Param			request	body		UpdateSessionRequest	true	"Session details"
+//	@Success		200		{object}	UpdateSessionResponse
+//	@Failure		400		{string}	string	"Session ID is required"
+//	@Failure		500		{string}	string	"Internal Error"
+//	@Router			/sessions/{id} [PATCH]
 func (handler *SessionHandler) UpdateSession(
 	writer http.ResponseWriter, request *http.Request,
 ) {
