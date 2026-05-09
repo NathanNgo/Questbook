@@ -6,8 +6,6 @@ import (
 	"net/http"
 	"os"
 
-	apiserver "github.com/NathanNgo/Questbook/backend/internal/api_server"
-
 	_ "github.com/jackc/pgx/v5/stdlib"
 
 	"github.com/danielgtaylor/huma/v2"
@@ -33,10 +31,13 @@ func corsMiddleware(multiplexer http.Handler) http.Handler {
 }
 
 func main() {
+	// Read env and get database URL.
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
 		log.Fatalf("Could not find database")
 	}
+
+	// Open database pool.
 	database, err := sql.Open("pgx", databaseURL)
 	if err != nil {
 		log.Fatalf("Error opening database: %v", err)
@@ -48,16 +49,26 @@ func main() {
 		}
 	}()
 
+	// Attempt to ping database
 	if err := database.Ping(); err != nil {
 		log.Fatalf("Cannot reach database: %v", err)
 	}
+	// Create a "router".
 	multiplexer := http.NewServeMux()
 
+	// Create a websocket router.
 	api := humago.New(multiplexer, huma.DefaultConfig("Questbook API", "1.0.0"))
 
-	gameHandler := new(apiserver.GameHandler)
-	gameHandler.Database = database
+	// Composite literal.
+	// Create struct and immediately return a pointer to the struct.
+	// Also, assign values to the fields of the struct, such as Database = database.
+	gameHandler := &api_server.gameHandler{
+		Database:        database,
+		WebsocketRouter: websocketRouter,
+	}
 
+	// Call "registerroutes" on sessionHandler struct, passing in the router.
+	// This will register the relevant callbacks to the relevant methods.
 	gameHandler.RegisterRoutes(api)
 
 	wrappedHandler := corsMiddleware(multiplexer)
