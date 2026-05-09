@@ -28,6 +28,7 @@ export const Route = createRootRouteWithContext<GlobalContext>()({
         links: [{ rel: "stylesheet", href: appCss }],
     }),
     component: RootComponent,
+    notFoundComponent: () => <div>404: Not Found</div>,
 });
 
 function RootComponent() {
