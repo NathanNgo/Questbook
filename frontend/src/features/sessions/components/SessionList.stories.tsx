@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useArgs } from "storybook/internal/preview-api";
+import { useArgs } from "storybook/preview-api";
 import type { Session } from "../api/types";
 import { SessionList } from "./SessionList";
 
