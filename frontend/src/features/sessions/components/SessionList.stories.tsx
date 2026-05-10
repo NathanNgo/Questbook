@@ -43,7 +43,6 @@ const meta: Meta<typeof SessionList> = {
 export default meta;
 type Story = StoryObj<typeof SessionList>;
 
-
 const makeSessions = (
     count: number,
     nameOverride?: (i: number) => string,
@@ -52,7 +51,6 @@ const makeSessions = (
         id: i + 1,
         sessionName: nameOverride ? nameOverride(i) : `Session ${i + 1}`,
     }));
-
 
 export const NoSessions: Story = {
     name: "No sessions",
