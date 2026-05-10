@@ -1,58 +1,63 @@
-import type { CreateSessionPayload, UpdateSessionPayload } from "./payloads";
-
-const BASE_URL = "http://localhost:8080";
+import {
+    type CreateSessionPayload,
+    client,
+    type UpdateSessionPayload,
+} from "../../../shared/api/client.ts";
 
 export async function fetchSessions() {
-    const response = await fetch(`${BASE_URL}/sessions`);
-    if (!response.ok) {
+    const { data, error } = await client.GET("/sessions");
+
+    if (error) {
         throw new Error("Failed to fetch Questbook sessions");
     }
 
-    return response.json();
+    return data;
 }
 
 export async function createSession(payload: CreateSessionPayload) {
-    const response = await fetch(`${BASE_URL}/sessions`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+    const { data, error } = await client.POST("/sessions", {
+        body: { ...payload },
+        headers: { "Content-Type": "application/json" },
     });
 
-    if (!response.ok) {
+    if (error) {
         throw new Error("Failed to create Questbook session");
     }
 
-    return response.json();
+    return data;
 }
 
 export async function deleteSession(sessionId: number) {
-    const response = await fetch(`${BASE_URL}/sessions/${sessionId}`, {
-        method: "DELETE",
+    const { data, error } = await client.DELETE("/sessions/{id}", {
+        params: {
+            path: { id: sessionId },
+            query: { version: 2 },
+        },
     });
 
-    if (!response.ok) {
+    if (error) {
         throw new Error("Faied to delete Questbook session");
     }
 
-    return response.json();
+    return data;
 }
 
 export async function updateSession(
     sessionId: number,
     payload: UpdateSessionPayload,
 ) {
-    const response = await fetch(`${BASE_URL}/sessions/${sessionId}`, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json",
+    const { data, error } = await client.PATCH("/sessions/{id}", {
+        params: {
+            path: { id: sessionId },
+            query: { version: 2 },
         },
-        body: JSON.stringify(payload),
+        body: { ...payload },
+        headers: { "Content-Type": "application/json" },
     });
 
-    if (!response.ok) {
+    if (error) {
         throw new Error(`Failed to update session name\npayload:\n${payload}`);
     }
-    return response.json();
+
+    return data;
 }

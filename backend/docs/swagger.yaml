@@ -30,6 +30,18 @@ definitions:
       id:
         type: string
     type: object
+  internal_api_server.UpdateSessionRequest:
+    properties:
+      sessionName:
+        type: string
+    type: object
+  internal_api_server.UpdateSessionResponse:
+    properties:
+      id:
+        type: string
+      sessionName:
+        type: string
+    type: object
 info:
   contact: {}
   description: API server for Questbook
@@ -135,6 +147,40 @@ paths:
           schema:
             type: string
       summary: Gets a session by session ID
+      tags:
+      - sessions
+    patch:
+      consumes:
+      - application/json
+      description: Updates a session that matches a given ID
+      parameters:
+      - description: Session ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Session details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_api_server.UpdateSessionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_api_server.UpdateSessionResponse'
+        "400":
+          description: Session ID is required
+          schema:
+            type: string
+        "500":
+          description: Internal Error
+          schema:
+            type: string
+      summary: Updates a session by session ID
       tags:
       - sessions
 swagger: "2.0"

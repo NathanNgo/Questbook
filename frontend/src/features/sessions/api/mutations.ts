@@ -1,5 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { CreateSessionPayload, UpdateSessionPayload } from "./payloads";
+import type {
+    CreateSessionPayload,
+    UpdateSessionPayload,
+} from "../../../shared/api/client.ts";
 import { createSession, deleteSession, updateSession } from "./requests";
 
 export function useCreateSessionMutation() {
