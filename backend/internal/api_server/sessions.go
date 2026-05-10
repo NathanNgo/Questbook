@@ -7,21 +7,13 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/NathanNgo/Questbook/backend/internal/websocket_router"
+	"github.com/NathanNgo/Questbook/backend/internal/websockets"
 	"github.com/gorilla/websocket"
 )
 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize: 1024,
-	WriteBufferSize: 1024,
-	CheckOrigin: func(r *http.Request) bool {
-		return true
-	},
-}
-
 type SessionHandler struct {
 	Database *sql.DB
-	WebsocketRouter *websocket_router.Router
+	WebsocketRouter *websockets.Router
 }
 
 func (handler *SessionHandler) RegisterRoutes(multiplexer *http.ServeMux) {
@@ -284,6 +276,7 @@ func (handler *SessionHandler) WebsocketUpgradeSession(
 	}
 
 	// Upgrade to websocket Connection
+	upgrader := websockets.WebsocketUpgrader()
 	conn, err := upgrader.Upgrade(writer, request, nil)
 	if err != nil {
 		http.Error(

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/NathanNgo/Questbook/backend/internal/websocket_router"
+	"github.com/NathanNgo/Questbook/backend/internal/websockets"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 
@@ -67,7 +67,7 @@ func main() {
 	multiplexer := http.NewServeMux()
 
 	// Create a websocket router.
-	websocketRouter := websocket_router.NewRouter()
+	websocketRouter := websockets.NewRouter()
 
 	// Composite literal.
 	// Create struct and immediately return a pointer to the struct.
