@@ -6,6 +6,11 @@ import (
 	"net/http"
 	"os"
 
+<<<<<<< HEAD
+=======
+	"github.com/NathanNgo/Questbook/backend/internal/websockets"
+
+>>>>>>> a466950 (Finished websocket router)
 	_ "github.com/jackc/pgx/v5/stdlib"
 
 	"github.com/danielgtaylor/huma/v2"
@@ -59,8 +64,10 @@ func main() {
 	// Create a "router".
 	multiplexer := http.NewServeMux()
 
-	// Create a websocket router.
 	api := humago.New(multiplexer, huma.DefaultConfig("Questbook API", "1.0.0"))
+
+	// Create a websocket router.
+	websocketRouter := websockets.NewRouter()
 
 	// Composite literal.
 	// Create struct and immediately return a pointer to the struct.
