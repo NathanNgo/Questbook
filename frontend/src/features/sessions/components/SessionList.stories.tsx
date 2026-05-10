@@ -7,13 +7,13 @@ const meta: Meta<typeof SessionList> = {
     title: "Components/SessionList",
     component: SessionList,
     render: ({ sessions }) => {
-        // useArgs - Allows us to change args -> reflect in story
-        // and change in story -> reflect in args
-        const [, updateArgs] = useArgs();
+        const [_, updateArgs] = useArgs();
 
         function handleDeleteSession(session: Session) {
             updateArgs({
-                sessions: sessions.filter((s) => s.id !== session.id),
+                sessions: sessions.filter(
+                    (otherSession) => otherSession.id !== session.id,
+                ),
             });
         }
 
@@ -22,10 +22,10 @@ const meta: Meta<typeof SessionList> = {
             newSessionName: string,
         ) {
             updateArgs({
-                sessions: sessions.map((s) =>
-                    s.id === sessionId
-                        ? { ...s, sessionName: newSessionName }
-                        : s,
+                sessions: sessions.map((session) =>
+                    session.id === sessionId
+                        ? { ...session, sessionName: newSessionName }
+                        : session,
                 ),
             });
         }
@@ -43,14 +43,14 @@ const meta: Meta<typeof SessionList> = {
 export default meta;
 type Story = StoryObj<typeof SessionList>;
 
-const makeSessions = (
-    count: number,
-    nameOverride?: (i: number) => string,
-): Session[] =>
-    Array.from({ length: count }, (_, i) => ({
-        id: i + 1,
-        sessionName: nameOverride ? nameOverride(i) : `Session ${i + 1}`,
+function makeSessions(count: number, sessionNamesOverride?: string[]) {
+    return Array.from({ length: count }, (_, sessionIndex) => ({
+        id: sessionIndex + 1,
+        sessionName: sessionNamesOverride
+            ? sessionNamesOverride[sessionIndex]
+            : `Session ${sessionIndex + 1}`,
     }));
+}
 
 export const NoSessions: Story = {
     name: "No sessions",
@@ -76,15 +76,11 @@ export const TwentySessions: Story = {
 export const LongSessionNames: Story = {
     name: "Long session names",
     args: {
-        sessions: makeSessions(
-            4,
-            (i) =>
-                [
-                    "The one where Bogdan goes on and on about some Nordic God",
-                    "We literally just spent 2 hours discussing Doctor Who, until we realised no one else was gonna show up",
-                    "One shot where we were all pirates but not swashbuckling ones, but internet ones",
-                    "Factorio",
-                ][i],
-        ),
+        sessions: makeSessions(4, [
+            "The one where Bogdan goes on and on about some Nordic God",
+            "We literally just spent 2 hours discussing Doctor Who, until we realised no one else was gonna show up",
+            "One shot where we were all pirates but not swashbuckling ones, but internet ones",
+            "Factorio",
+        ]),
     },
 };
