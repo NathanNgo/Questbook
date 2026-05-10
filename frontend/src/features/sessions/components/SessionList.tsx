@@ -14,6 +14,9 @@ export function SessionList({
     onDeleteSession,
     onChangeSessionName,
 }: SessionListProps) {
+    if (!sessions.length) {
+        return <p>No Sessions yet...</p>;
+    }
     return (
         <div className={styles.sessionList}>
             {/*TODO: Give session a proper type with OpenAPI*/}

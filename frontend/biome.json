@@ -60,7 +60,12 @@
     },
     "overrides": [
         {
-            "includes": ["*.config.ts", "*.config.js", "src/integrations/**"],
+            "includes": [
+                "*.config.ts",
+                "*.config.js",
+                "src/integrations/**",
+                "**/*.stories.tsx"
+            ],
             "linter": {
                 "rules": {
                     "style": {
