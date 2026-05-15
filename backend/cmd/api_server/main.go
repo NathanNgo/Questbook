@@ -59,10 +59,10 @@ func main() {
 	}
 	multiplexer := http.NewServeMux()
 
-	sessionHandler := new(apiserver.SessionHandler)
-	sessionHandler.Database = database
+	gameHandler := new(apiserver.GameHandler)
+	gameHandler.Database = database
 
-	sessionHandler.RegisterRoutes(multiplexer)
+	gameHandler.RegisterRoutes(multiplexer)
 
 	wrappedHandler := corsMiddleware(multiplexer)
 
