@@ -3,7 +3,7 @@ import { fetchGames } from "./requests";
 
 export function gamesQueryOptions() {
     return queryOptions({
-        queryKey: ["sessions"],
+        queryKey: ["games"],
         queryFn: fetchGames,
     });
 }
