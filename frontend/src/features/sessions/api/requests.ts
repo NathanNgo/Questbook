@@ -1,18 +1,18 @@
-import type { CreateSessionPayload, UpdateSessionPayload } from "./payloads";
+import type { CreateGamePayload, UpdateGamePayload } from "./payloads";
 
 const BASE_URL = "http://localhost:8080";
 
-export async function fetchSessions() {
-    const response = await fetch(`${BASE_URL}/sessions`);
+export async function fetchGames() {
+    const response = await fetch(`${BASE_URL}/games`);
     if (!response.ok) {
-        throw new Error("Failed to fetch Questbook sessions");
+        throw new Error("Failed to fetch Questbook games");
     }
 
     return response.json();
 }
 
-export async function createSession(payload: CreateSessionPayload) {
-    const response = await fetch(`${BASE_URL}/sessions`, {
+export async function createGame(payload: CreateGamePayload) {
+    const response = await fetch(`${BASE_URL}/game`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -21,29 +21,29 @@ export async function createSession(payload: CreateSessionPayload) {
     });
 
     if (!response.ok) {
-        throw new Error("Failed to create Questbook session");
+        throw new Error("Failed to create Questbook game");
     }
 
     return response.json();
 }
 
-export async function deleteSession(sessionId: number) {
-    const response = await fetch(`${BASE_URL}/sessions/${sessionId}`, {
+export async function deleteGame(gameId: number) {
+    const response = await fetch(`${BASE_URL}/game/${gameId}`, {
         method: "DELETE",
     });
 
     if (!response.ok) {
-        throw new Error("Faied to delete Questbook session");
+        throw new Error("Failed to delete Questbook game");
     }
 
     return response.json();
 }
 
-export async function updateSession(
-    sessionId: number,
-    payload: UpdateSessionPayload,
+export async function updateGame(
+    gameId: number,
+    payload: UpdateGamePayload,
 ) {
-    const response = await fetch(`${BASE_URL}/sessions/${sessionId}`, {
+    const response = await fetch(`${BASE_URL}/games/${gameId}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
@@ -52,7 +52,7 @@ export async function updateSession(
     });
 
     if (!response.ok) {
-        throw new Error(`Failed to update session name\npayload:\n${payload}`);
+        throw new Error(`Failed to update game\npayload:\n${payload}`);
     }
     return response.json();
 }

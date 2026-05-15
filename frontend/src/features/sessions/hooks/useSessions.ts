@@ -1,13 +1,13 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import {
-    useChangeSessionMutation,
-    useDeleteSessionMutation,
+    useChangeGameMutation,
+    useDeleteGameMutation,
 } from "../api/mutations";
-import { sessionsQueryOptions } from "../api/queries";
+import { gamesQueryOptions } from "../api/queries";
 
-export function useSessions() {
-    const { data: sessions } = useSuspenseQuery(sessionsQueryOptions());
-    const { mutate: deleteSession } = useDeleteSessionMutation();
-    const { mutate: changeSession } = useChangeSessionMutation();
-    return { sessions, deleteSession, changeSession };
+export function useGames() {
+    const { data: games } = useSuspenseQuery(gamesQueryOptions());
+    const { mutate: deleteGame } = useDeleteGameMutation();
+    const { mutate: changeGame } = useChangeGameMutation();
+    return { games, deleteGame, changeGame };
 }

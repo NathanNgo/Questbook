@@ -1,40 +1,40 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { CreateSessionPayload, UpdateSessionPayload } from "./payloads";
-import { createSession, deleteSession, updateSession } from "./requests";
+import type { CreateGamePayload, UpdateGamePayload } from "./payloads";
+import { createGame, deleteGame, updateGame } from "./requests";
 
-export function useCreateSessionMutation() {
+export function useCreateGameMutation() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (payload: CreateSessionPayload) => createSession(payload),
+        mutationFn: (payload: CreateGamePayload) => createGame(payload),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["sessions"] });
+            queryClient.invalidateQueries({ queryKey: ["games"] });
         },
     });
 }
 
-export function useDeleteSessionMutation() {
+export function useDeleteGameMutation() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (sessionId: number) => deleteSession(sessionId),
+        mutationFn: (gameId: number) => deleteGame(gameId),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["sessions"] });
+            queryClient.invalidateQueries({ queryKey: ["games"] });
         },
     });
 }
 
-export function useChangeSessionMutation() {
+export function useChangeGameMutation() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({
-            sessionId,
+            gameId,
             payload,
         }: {
-            sessionId: number;
-            payload: UpdateSessionPayload;
-        }) => updateSession(sessionId, payload),
+            gameId: number;
+            payload: UpdateGamePayload;
+        }) => updateGame(gameId, payload),
         onSuccess: () =>
-            queryClient.invalidateQueries({ queryKey: ["sessions"] }),
+            queryClient.invalidateQueries({ queryKey: ["games"] }),
     });
 }

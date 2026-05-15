@@ -1,7 +1,7 @@
-import type { Session } from "./types";
+import type { Game } from "./types";
 
-export type UpdateSessionPayload = Partial<Omit<Session, "id">>;
+export type UpdateGamePayload = Partial<Omit<Game, "id">>;
 
-export type CreateSessionPayload = {
-    sessionName: string;
+export type CreateGamePayload = {
+    gameName: string;
 };
