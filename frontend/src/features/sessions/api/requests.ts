@@ -12,7 +12,7 @@ export async function fetchGames() {
 }
 
 export async function createGame(payload: CreateGamePayload) {
-    const response = await fetch(`${BASE_URL}/game`, {
+    const response = await fetch(`${BASE_URL}/games`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export async function createGame(payload: CreateGamePayload) {
 }
 
 export async function deleteGame(gameId: number) {
-    const response = await fetch(`${BASE_URL}/game/${gameId}`, {
+    const response = await fetch(`${BASE_URL}/games/${gameId}`, {
         method: "DELETE",
     });
 
