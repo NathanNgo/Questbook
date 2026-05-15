@@ -1,6 +1,6 @@
 import { sortByNumericValue } from "#/shared/utils/sortBy";
 import type { Game } from "../api/types";
-import styles from "./GameList.module.css";
+import styles from "./SessionList.module.css";
 import { GameListItem } from "./SessionListItem";
 
 interface GameListProps {
