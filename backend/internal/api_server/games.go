@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/NathanNgo/Questbook/backend/internal/websockets"
 	"github.com/danielgtaylor/huma/v2"
@@ -49,6 +50,12 @@ func (handler *GameHandler) RegisterRoutes(api huma.API) {
 		Summary: "Update a game's information",
 		Tags:    []string{"Games"},
 	}, handler.UpdateGame)
+	huma.Register(api, huma.Operation{
+		Method:  http.MethodGet,
+		Path:    "/games/{id}/websocket",
+		Summary: "Upgrade to a websocket connection for a game session",
+		Tags:    []string{"Games"},
+	}, handler.WebsocketUpgradeSession)
 }
 
 type CreateGameRequestPayload struct {
@@ -229,5 +236,10 @@ func (handler *GameHandler) WebsocketUpgradeSession(
 	}
 
 	// Send data.
+	conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf("Hello %s", sessionId)))
+
+	timer := time.NewTimer(2 * time.Second)
+	<-timer.C
+
 	conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf("Hello %s", sessionId)))
 }
