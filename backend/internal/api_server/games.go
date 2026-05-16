@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/NathanNgo/Questbook/backend/internal/websockets"
 	"github.com/gorilla/websocket"
@@ -22,6 +23,7 @@ func (handler *GameHandler) RegisterRoutes(multiplexer *http.ServeMux) {
 	multiplexer.HandleFunc("GET /games/{id}", handler.GetGame)
 	multiplexer.HandleFunc("DELETE /games/{id}", handler.DeleteGame)
 	multiplexer.HandleFunc("PATCH /games/{id}", handler.UpdateGame)
+	multiplexer.HandleFunc("GET /games/{id}/websocket", handler.WebsocketUpgradeSession)
 }
 
 type CreateGameRequestPayload struct {
@@ -282,5 +284,10 @@ func (handler *GameHandler) WebsocketUpgradeSession(
 	}
 
 	// Send data.
+	conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf("Hello %s", sessionId)))
+
+	timer := time.NewTimer(2 * time.Second)
+	<-timer.C
+
 	conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf("Hello %s", sessionId)))
 }
