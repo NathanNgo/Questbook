@@ -34,7 +34,6 @@ export function useChangeGameMutation() {
             gameId: number;
             payload: UpdateGamePayload;
         }) => updateGame(gameId, payload),
-        onSuccess: () =>
-            queryClient.invalidateQueries({ queryKey: ["games"] }),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ["games"] }),
     });
 }

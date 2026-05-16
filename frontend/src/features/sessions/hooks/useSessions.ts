@@ -1,8 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import {
-    useChangeGameMutation,
-    useDeleteGameMutation,
-} from "../api/mutations";
+import { useChangeGameMutation, useDeleteGameMutation } from "../api/mutations";
 import { gamesQueryOptions } from "../api/queries";
 
 export function useGames() {

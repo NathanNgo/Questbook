@@ -39,10 +39,7 @@ export async function deleteGame(gameId: number) {
     return response.json();
 }
 
-export async function updateGame(
-    gameId: number,
-    payload: UpdateGamePayload,
-) {
+export async function updateGame(gameId: number, payload: UpdateGamePayload) {
     const response = await fetch(`${BASE_URL}/games/${gameId}`, {
         method: "PATCH",
         headers: {
