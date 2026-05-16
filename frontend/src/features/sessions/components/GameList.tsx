@@ -1,7 +1,7 @@
 import { sortByNumericValue } from "#/shared/utils/sortBy";
 import type { Game } from "../api/types";
+import { GameListItem } from "./GameListItem";
 import styles from "./SessionList.module.css";
-import { GameListItem } from "./SessionListItem";
 
 interface GameListProps {
     games: Game[];

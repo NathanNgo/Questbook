@@ -1,5 +1,5 @@
 import type { Game } from "../api/types";
-import { useGames } from "../hooks/useSessions";
+import { useGames } from "../hooks/useGames";
 import { GameList } from "./GameList";
 
 function GameListContainer() {
