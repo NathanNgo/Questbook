@@ -10,32 +10,22 @@ import (
 
 // Define what a "Message" looks like
 type Message struct {
-	Type string `json:"type"`
+	Type    string          `json:"type"`
 	Payload json.RawMessage `json:"payload"`
 }
 
 // This is what a "Client" looks like.
 type Client struct {
 	Connection *websocket.Conn
-	SessionId string
+	SessionId  string
 }
 
 // This is what a HandlerFunc needs to look like.
-type HandlerFunc func(payload []byte, client *Client) 
+type HandlerFunc func(payload []byte, client *Client)
 
 // This is what a "Router" looks like. Right now it just holds a routes mapping.
 type Router struct {
 	routes map[string]HandlerFunc
-}
-
-func WebsocketUpgrader() *websocket.Upgrader {
-	return &websocket.Upgrader{
-		ReadBufferSize: 1024,
-		WriteBufferSize: 1024,
-		CheckOrigin: func(r *http.Request) bool {
-			return true
-		},
-	}
 }
 
 // This is the constructor method.
@@ -79,5 +69,15 @@ func (router *Router) ServerWebSocket(client *Client) {
 		} else {
 			log.Printf("Could not find route of type %s", message.Type)
 		}
+	}
+}
+
+func WebsocketUpgrader() *websocket.Upgrader {
+	return &websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
 	}
 }
