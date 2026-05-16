@@ -6,11 +6,9 @@ import (
 	"net/http"
 	"os"
 
-<<<<<<< HEAD
-=======
+	"github.com/NathanNgo/Questbook/backend/internal/api_server"
 	"github.com/NathanNgo/Questbook/backend/internal/websockets"
 
->>>>>>> a466950 (Finished websocket router)
 	_ "github.com/jackc/pgx/v5/stdlib"
 
 	"github.com/danielgtaylor/huma/v2"
@@ -72,7 +70,7 @@ func main() {
 	// Composite literal.
 	// Create struct and immediately return a pointer to the struct.
 	// Also, assign values to the fields of the struct, such as Database = database.
-	gameHandler := &api_server.gameHandler{
+	gameHandler := &api_server.GameHandler{
 		Database:        database,
 		WebsocketRouter: websocketRouter,
 	}
