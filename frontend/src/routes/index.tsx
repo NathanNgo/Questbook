@@ -5,5 +5,5 @@ export const Route = createFileRoute("/")({
 });
 
 function App() {
-    return <Link to="/sessions">Games</Link>;
+    return <Link to="/games">Games</Link>;
 }

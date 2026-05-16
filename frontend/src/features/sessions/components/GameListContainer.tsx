@@ -1,6 +1,6 @@
 import type { Game } from "../api/types";
-import { useGames } from "../hooks/useSessions";
-import { GameList } from "./SessionList";
+import { useGames } from "../hooks/useGames";
+import { GameList } from "./GameList";
 
 function GameListContainer() {
     const { games, deleteGame, changeGame } = useGames();
