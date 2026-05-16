@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useArgs } from "storybook/preview-api";
 import type { Game } from "../api/types";
-import { GameList } from "./SessionList";
+import { GameList } from "./GameList";
 
 const meta: Meta<typeof GameList> = {
     title: "Components/GameList",
