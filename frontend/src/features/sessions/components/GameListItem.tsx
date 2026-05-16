@@ -1,7 +1,7 @@
 import { useId, useState } from "react";
 
 import type { Game } from "../api/types";
-import styles from "./SessionListItem.module.css";
+import styles from "./GameListItem.module.css";
 
 interface GameListItemProps {
     game: Game;

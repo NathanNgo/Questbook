@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { gamesQueryOptions } from "#/features/sessions/api/queries";
-import { GameCreation } from "#/features/sessions/components/SessionCreation";
-import { GameList } from "#/features/sessions/components/SessionListContainer";
+import { GameCreation } from "#/features/sessions/components/GameCreation";
+import { GameList } from "#/features/sessions/components/GameListContainer";
 
 export const Route = createFileRoute("/sessions")({
     component: Games,
