@@ -1,82 +1,77 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useArgs } from "storybook/preview-api";
-import type { Session } from "../api/types";
-import { SessionList } from "./SessionList";
+import type { Game } from "../api/types";
+import { GameList } from "./SessionList";
 
-const meta: Meta<typeof SessionList> = {
-    title: "Components/SessionList",
-    component: SessionList,
-    render: ({ sessions }) => {
+const meta: Meta<typeof GameList> = {
+    title: "Components/GameList",
+    component: GameList,
+    render: ({ games }) => {
         const [_, updateArgs] = useArgs();
 
-        function handleDeleteSession(session: Session) {
+        function handleDeleteGame(game: Game) {
             updateArgs({
-                sessions: sessions.filter(
-                    (otherSession) => otherSession.id !== session.id,
-                ),
+                games: games.filter((otherGame) => otherGame.id !== game.id),
             });
         }
 
-        function handleChangeSessionName(
-            sessionId: number,
-            newSessionName: string,
-        ) {
+        function handleChangeGameName(gameId: number, newGameName: string) {
             updateArgs({
-                sessions: sessions.map((session) =>
-                    session.id === sessionId
-                        ? { ...session, sessionName: newSessionName }
-                        : session,
+                games: games.map((game) =>
+                    game.id === gameId
+                        ? { ...game, gameName: newGameName }
+                        : game,
                 ),
             });
         }
 
         return (
-            <SessionList
-                sessions={sessions}
-                onDeleteSession={handleDeleteSession}
-                onChangeSessionName={handleChangeSessionName}
+            <GameList
+                games={games}
+                onDeleteGame={handleDeleteGame}
+                onChangeGameName={handleChangeGameName}
             />
         );
     },
 };
 
 export default meta;
-type Story = StoryObj<typeof SessionList>;
+type Story = StoryObj<typeof GameList>;
 
-function makeSessions(count: number, sessionNamesOverride?: string[]) {
-    return Array.from({ length: count }, (_, sessionIndex) => ({
-        id: sessionIndex + 1,
-        sessionName: sessionNamesOverride
-            ? sessionNamesOverride[sessionIndex]
-            : `Session ${sessionIndex + 1}`,
+function makeGames(count: number, gameNamesOverride?: string[]) {
+    return Array.from({ length: count }, (_, gameIndex) => ({
+        id: gameIndex + 1,
+        gameName: gameNamesOverride
+            ? gameNamesOverride[gameIndex]
+            : `Game ${gameIndex + 1}`,
     }));
 }
 
-export const NoSessions: Story = {
-    name: "No sessions",
+export const NoGames: Story = {
+    name: "No games",
     args: {
-        sessions: [],
+        games: [],
     },
 };
 
-export const ThreeSessions: Story = {
-    name: "Three sessions",
+export const ThreeGames: Story = {
+    name: "Three games",
     args: {
-        sessions: makeSessions(3),
+        games: makeGames(3),
     },
 };
 
-export const TwentySessions: Story = {
-    name: "Twenty sessions",
+export const TwentyGames: Story = {
+    name: "Twenty games",
     args: {
-        sessions: makeSessions(20),
+        games: makeGames(20),
     },
 };
 
-export const LongSessionNames: Story = {
-    name: "Long session names",
+export const LongGameNames: Story = {
+    name: "Long game names",
     args: {
-        sessions: makeSessions(4, [
+        games: makeGames(4, [
             "The one where Bogdan goes on and on about some Nordic God",
             "We literally just spent 2 hours discussing Doctor Who, until we realised no one else was gonna show up",
             "One shot where we were all pirates but not swashbuckling ones, but internet ones",

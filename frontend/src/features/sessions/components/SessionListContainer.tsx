@@ -1,28 +1,25 @@
-import type { Session } from "../api/types";
-import { useSessions } from "../hooks/useSessions";
-import { SessionList } from "./SessionList";
+import type { Game } from "../api/types";
+import { useGames } from "../hooks/useSessions";
+import { GameList } from "./SessionList";
 
-function SessionListContainer() {
-    const { sessions, deleteSession, changeSession } = useSessions();
+function GameListContainer() {
+    const { games, deleteGame, changeGame } = useGames();
 
-    function handleDeleteSession(session: Session) {
-        deleteSession(session.id);
+    function handleDeleteGame(game: Game) {
+        deleteGame(game.id);
     }
 
-    function handleChangeSessionName(
-        sessionId: number,
-        newSessionName: string,
-    ) {
-        changeSession({ sessionId, payload: { sessionName: newSessionName } });
+    function handleChangeGameName(gameId: number, newGameName: string) {
+        changeGame({ gameId, payload: { gameName: newGameName } });
     }
 
     return (
-        <SessionList
-            sessions={sessions}
-            onDeleteSession={handleDeleteSession}
-            onChangeSessionName={handleChangeSessionName}
+        <GameList
+            games={games}
+            onDeleteGame={handleDeleteGame}
+            onChangeGameName={handleChangeGameName}
         />
     );
 }
 
-export { SessionListContainer as SessionList };
+export { GameListContainer as GameList };

@@ -1,16 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { sessionsQueryOptions } from "#/features/sessions/api/queries";
-import { SessionCreation } from "#/features/sessions/components/SessionCreation";
-import { SessionList } from "#/features/sessions/components/SessionListContainer";
+import { gamesQueryOptions } from "#/features/sessions/api/queries";
+import { GameCreation } from "#/features/sessions/components/SessionCreation";
+import { GameList } from "#/features/sessions/components/SessionListContainer";
 
 export const Route = createFileRoute("/sessions")({
-    component: Sessions,
+    component: Games,
     loader: async ({ context: { queryClient } }) => {
-        await queryClient.ensureQueryData(sessionsQueryOptions());
+        await queryClient.ensureQueryData(gamesQueryOptions());
     },
 });
 
-function Sessions() {
+function Games() {
     const imgElement = document.querySelector('img[alt="TanStack Devtools"]');
     imgElement?.setAttribute(
         "src",
@@ -18,8 +18,8 @@ function Sessions() {
     );
     return (
         <>
-            <SessionList />
-            <SessionCreation />
+            <GameList />
+            <GameCreation />
         </>
     );
 }

@@ -1,23 +1,21 @@
 import { useState } from "react";
-import { useCreateSessionMutation } from "../api/mutations";
+import { useCreateGameMutation } from "../api/mutations";
 
-export function SessionCreation() {
-    // Controlled State for Input
-    const [sessionName, setSessionName] = useState("");
-    const { mutate } = useCreateSessionMutation();
+export function GameCreation() {
+    const [gameName, setGameName] = useState("");
+    const { mutate } = useCreateGameMutation();
 
-    // Handler to Update Controlled state
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-        setSessionName(event.target.value);
+        setGameName(event.target.value);
     }
 
     function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
-        if (!sessionName.trim()) {
+        if (!gameName.trim()) {
             return;
         }
-        mutate({ sessionName: sessionName.trim() });
-        setSessionName("");
+        mutate({ gameName: gameName.trim() });
+        setGameName("");
     }
 
     return (
@@ -25,10 +23,10 @@ export function SessionCreation() {
             <input
                 type="text"
                 onChange={handleChange}
-                value={sessionName}
-                placeholder="How ya doin'?"
+                value={gameName}
+                placeholder="New game name..."
             />
-            <button type="submit"> Submit </button>
+            <button type="submit"> Create </button>
         </form>
     );
 }

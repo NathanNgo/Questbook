@@ -1,35 +1,35 @@
 import { sortByNumericValue } from "#/shared/utils/sortBy";
-import type { Session } from "../api/types";
+import type { Game } from "../api/types";
 import styles from "./SessionList.module.css";
-import { SessionListItem } from "./SessionListItem";
+import { GameListItem } from "./SessionListItem";
 
-interface SessionListProps {
-    sessions: Session[];
-    onDeleteSession: (session: Session) => void;
-    onChangeSessionName: (sessionId: number, newSessionName: string) => void;
+interface GameListProps {
+    games: Game[];
+    onDeleteGame: (game: Game) => void;
+    onChangeGameName: (gameId: number, newGameName: string) => void;
 }
 
-export function SessionList({
-    sessions,
-    onDeleteSession,
-    onChangeSessionName,
-}: SessionListProps) {
-    if (!sessions.length) {
-        return <p>No Sessions yet...</p>;
+export function GameList({
+    games,
+    onDeleteGame,
+    onChangeGameName,
+}: GameListProps) {
+    if (!games.length) {
+        return <p>No Games yet...</p>;
     }
     return (
-        <div className={styles.sessionList}>
-            {/*TODO: Give session a proper type with OpenAPI*/}
-            {(sessions as Session[])
-                .sort(sortByNumericValue((session) => session.id))
-                .map((session) => (
-                    <SessionListItem
-                        session={session}
-                        onDeleteSession={() => onDeleteSession(session)}
-                        onChangeSessionName={(newSessionName: string) =>
-                            onChangeSessionName(session.id, newSessionName)
+        <div className={styles.gameList}>
+            {/*TODO: Give game a proper type with OpenAPI*/}
+            {(games as Game[])
+                .sort(sortByNumericValue((game) => game.id))
+                .map((game) => (
+                    <GameListItem
+                        game={game}
+                        onDeleteGame={() => onDeleteGame(game)}
+                        onChangeGameName={(newGameName: string) =>
+                            onChangeGameName(game.id, newGameName)
                         }
-                        key={session.id}
+                        key={game.id}
                     />
                 ))}
         </div>

@@ -1,4 +1,4 @@
-.sessionListItem {
+.gameListItem {
     display: flex;
     flex-direction: row;
     gap: 10px;
@@ -7,21 +7,21 @@
     padding: 10px;
 }
 
-.sessionListItem:hover {
+.gameListItem:hover {
     background-color: antiquewhite;
 }
 
-.sessionNameInput {
+.gameNameInput {
     width: 200px;
 }
 
-.sessionNameInputForm {
+.gameNameInputForm {
     display: flex;
     flex-direction: row;
     gap: 10px;
 }
 
-.sessionNameDisplay {
+.gameNameDisplay {
     width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;

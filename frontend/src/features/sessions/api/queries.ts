@@ -1,9 +1,9 @@
 import { queryOptions } from "@tanstack/react-query";
-import { fetchSessions } from "./requests";
+import { fetchGames } from "./requests";
 
-export function sessionsQueryOptions() {
+export function gamesQueryOptions() {
     return queryOptions({
-        queryKey: ["sessions"],
-        queryFn: fetchSessions,
+        queryKey: ["games"],
+        queryFn: fetchGames,
     });
 }

@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS sessions (
+CREATE TABLE IF NOT EXISTS games (
     id SERIAL PRIMARY KEY,
-    session_name TEXT NOT NULL
+    game_name TEXT NOT NULL
 );

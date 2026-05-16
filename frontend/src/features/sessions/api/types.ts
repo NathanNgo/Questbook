@@ -1,4 +1,4 @@
-export type Session = {
+export type Game = {
     id: number;
-    sessionName: string;
+    gameName: string;
 };
