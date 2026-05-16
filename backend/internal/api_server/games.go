@@ -3,12 +3,17 @@ package api_server
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/NathanNgo/Questbook/backend/internal/websockets"
+	"github.com/gorilla/websocket"
 )
 
 type GameHandler struct {
-	Database *sql.DB
+	Database        *sql.DB
+	WebsocketRouter *websockets.Router
 }
 
 func (handler *GameHandler) RegisterRoutes(multiplexer *http.ServeMux) {
@@ -255,4 +260,27 @@ func (handler *GameHandler) UpdateGame(
 	if err := json.NewEncoder(writer).Encode(gameResponse); err != nil {
 		log.Printf("UpdateGame failed to encode response")
 	}
+}
+
+func (handler *GameHandler) WebsocketUpgradeSession(
+	writer http.ResponseWriter, request *http.Request,
+) {
+	sessionId := request.PathValue("id")
+	if sessionId == "" {
+		http.Error(writer, "ID is required", http.StatusBadRequest)
+		return
+	}
+
+	// Upgrade to websocket Connection
+	upgrader := websockets.WebsocketUpgrader()
+	conn, err := upgrader.Upgrade(writer, request, nil)
+	if err != nil {
+		http.Error(
+			writer, "Could not upgrade to websocket connection", http.StatusBadRequest,
+		)
+		return
+	}
+
+	// Send data.
+	conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf("Hello %s", sessionId)))
 }

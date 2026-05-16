@@ -6,11 +6,10 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/NathanNgo/Questbook/backend/internal/api_server"
 	"github.com/NathanNgo/Questbook/backend/internal/websockets"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
-
-	_ "github.com/NathanNgo/Questbook/backend/docs"
 
 	httpSwagger "github.com/swaggo/http-swagger"
 )
@@ -72,7 +71,7 @@ func main() {
 	// Composite literal.
 	// Create struct and immediately return a pointer to the struct.
 	// Also, assign values to the fields of the struct, such as Database = database.
-	gameHandler := &api_server.gameHandler{
+	gameHandler := &api_server.GameHandler{
 		Database:        database,
 		WebsocketRouter: websocketRouter,
 	}
