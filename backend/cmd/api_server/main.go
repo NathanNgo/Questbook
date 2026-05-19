@@ -80,6 +80,10 @@ func main() {
 	// This will register the relevant callbacks to the relevant methods.
 	gameHandler.RegisterRoutes(multiplexer)
 
+	// Registers all GameHandler websocket handler functions onto the Websocket Router,
+	// So that the Websocket Router can route to them and call them.
+	gameHandler.RegisterWebsocketHandlers()
+
 	wrappedHandler := corsMiddleware(multiplexer)
 
 	multiplexer.Handle("/swagger/", httpSwagger.Handler(
