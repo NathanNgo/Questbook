@@ -13,7 +13,7 @@
     "format": "biome format",
     "lint": "biome lint",
     "check": "biome check",
-    "generate:api": "openapi-typescript ${API_URL:-http://localhost:8080/swagger/doc.json} -o ./src/types/api.ts",
+    "generate:api": "openapi-typescript ${API_URL:-http://localhost:8080/openapi.json} -o ./src/types/api.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -45,7 +45,7 @@
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
     "jsdom": "^28.1.0",
-    "openapi-typescript": "^5.4.2",
+    "openapi-typescript": "^7.13.0",
     "storybook": "^10.3.6",
     "stylelint": "^17.11.0",
     "stylelint-config-css-modules": "^4.6.0",
