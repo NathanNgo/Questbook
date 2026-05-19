@@ -79,6 +79,10 @@ func main() {
 	// This will register the relevant callbacks to the relevant methods.
 	gameHandler.RegisterRoutes(api)
 
+	// Registers all GameHandler websocket handler functions onto the Websocket Router,
+	// So that the Websocket Router can route to them and call them.
+	gameHandler.RegisterWebsocketHandlers()
+
 	wrappedHandler := corsMiddleware(multiplexer)
 
 	log.Printf("Server started on port %s", defaultServerPort)

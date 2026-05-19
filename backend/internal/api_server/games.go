@@ -3,14 +3,11 @@ package api_server
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/NathanNgo/Questbook/backend/internal/websockets"
 	"github.com/danielgtaylor/huma/v2"
-	"github.com/gorilla/websocket"
 )
 
 type GameHandler struct {
@@ -227,7 +224,7 @@ func (handler *GameHandler) WebsocketUpgradeSession(
 
 	// Upgrade to websocket Connection
 	upgrader := websockets.WebsocketUpgrader()
-	conn, err := upgrader.Upgrade(writer, request, nil)
+	connection, err := upgrader.Upgrade(writer, request, nil)
 	if err != nil {
 		http.Error(
 			writer, "Could not upgrade to websocket connection", http.StatusBadRequest,
@@ -235,11 +232,10 @@ func (handler *GameHandler) WebsocketUpgradeSession(
 		return
 	}
 
-	// Send data.
-	conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf("Hello %s", sessionId)))
+	client := &websockets.Client{
+		Connection: connection,
+		SessionId:  sessionId,
+	}
 
-	timer := time.NewTimer(2 * time.Second)
-	<-timer.C
-
-	conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf("Hello %s", sessionId)))
+	handler.WebsocketRouter.ServeWebSocket(client)
 }

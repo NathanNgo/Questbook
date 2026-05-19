@@ -1,13 +1,21 @@
 package api_server
 
-import "github.com/NathanNgo/Questbook/backend/internal/websockets"
+import (
+	"fmt"
 
-func (gameHandler *GameHandler) RegisterWebsocketHandlers() {
-	gameHandler.WebsocketRouter.SetRoute("CURSOR_MOVED", test)
+	"github.com/NathanNgo/Questbook/backend/internal/websockets"
+	"github.com/gorilla/websocket"
+)
 
-	return
+func (handler *GameHandler) RegisterWebsocketHandlers() {
+	handler.WebsocketRouter.SetRoute(websockets.MessageEcho, handler.handleEcho)
 }
 
-func test(payload []byte, client *websockets.Client) {
-	return
+func (handler *GameHandler) handleEcho(payload []byte, client *websockets.Client) {
+	client.Connection.WriteMessage(
+		websocket.TextMessage,
+		[]byte(
+			fmt.Sprintf("Hello %s, your message was %s\n", client.SessionId, payload),
+		),
+	)
 }
