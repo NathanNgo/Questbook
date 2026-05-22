@@ -8,4 +8,4 @@ type Registrar interface {
 
 // GameHandler needs to have the methods mentioned in Registrar, regardless of which
 // file they are defined in. The receiver methods for GameHandler just need to exist.
-var _ Registrar = (*GameHandler)(nil)
+var _ Registrar = (*DebugHandler)(nil)
