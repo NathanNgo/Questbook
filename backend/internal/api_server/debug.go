@@ -1,17 +1,23 @@
 package api_server
 
 import (
+	"database/sql"
 	"fmt"
 
 	"github.com/NathanNgo/Questbook/backend/internal/websockets"
 	"github.com/gorilla/websocket"
 )
 
-func (handler *GameHandler) RegisterWebsocketHandlers() {
+type DebugHandler struct {
+	Database        *sql.DB
+	WebsocketRouter *websockets.Router
+}
+
+func (handler *DebugHandler) RegisterWebsocketHandlers() {
 	handler.WebsocketRouter.SetRoute(websockets.MessageEcho, handler.handleEcho)
 }
 
-func (handler *GameHandler) handleEcho(payload []byte, client *websockets.Client) {
+func (handler *DebugHandler) handleEcho(payload []byte, client *websockets.Client) {
 	client.Connection.WriteMessage(
 		websocket.TextMessage,
 		[]byte(

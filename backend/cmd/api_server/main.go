@@ -68,6 +68,9 @@ func main() {
 	// Create a websocket router.
 	websocketRouter := websockets.NewRouter()
 
+	debugHandler := &api_server.DebugHandler{
+		WebsocketRouter: websocketRouter,
+	}
 	// Composite literal.
 	// Create struct and immediately return a pointer to the struct.
 	// Also, assign values to the fields of the struct, such as Database = database.
@@ -80,9 +83,9 @@ func main() {
 	// This will register the relevant callbacks to the relevant methods.
 	gameHandler.RegisterRoutes(multiplexer)
 
-	// Registers all GameHandler websocket handler functions onto the Websocket Router,
+	// Registers all DebugHandler websocket handler functions onto the Websocket Router,
 	// So that the Websocket Router can route to them and call them.
-	gameHandler.RegisterWebsocketHandlers()
+	debugHandler.RegisterWebsocketHandlers()
 
 	wrappedHandler := corsMiddleware(multiplexer)
 
