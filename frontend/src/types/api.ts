@@ -52,7 +52,7 @@ export interface paths {
             };
             requestBody: {
                 content: {
-                    "application/json": components["schemas"]["CreateGameRequestPayloadBody"];
+                    "application/json": components["schemas"]["CreateGameRequestPayload"];
                 };
             };
             responses: {
@@ -172,7 +172,7 @@ export interface paths {
             };
             requestBody: {
                 content: {
-                    "application/json": components["schemas"]["UpdateGameRequestBody"];
+                    "application/json": components["schemas"]["UpdateGameRequestPayload"];
                 };
             };
             responses: {
@@ -202,11 +202,11 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        CreateGameRequestPayloadBody: {
+        CreateGameRequestPayload: {
             /**
              * Format: uri
              * @description A URL to the JSON Schema for this object.
-             * @example https://example.com/schemas/CreateGameRequestPayloadBody.json
+             * @example https://example.com/schemas/CreateGameRequestPayload.json
              */
             readonly $schema?: string;
             /** @description The name of the game */
@@ -302,11 +302,11 @@ export interface components {
             readonly $schema?: string;
             gameName: string;
         };
-        UpdateGameRequestBody: {
+        UpdateGameRequestPayload: {
             /**
              * Format: uri
              * @description A URL to the JSON Schema for this object.
-             * @example https://example.com/schemas/UpdateGameRequestBody.json
+             * @example https://example.com/schemas/UpdateGameRequestPayload.json
              */
             readonly $schema?: string;
             /** @description The updated name of the game */
@@ -329,5 +329,15 @@ export interface components {
     headers: never;
     pathItems: never;
 }
+export type CreateGameRequestPayload = components['schemas']['CreateGameRequestPayload'];
+export type CreateGameResponseBody = components['schemas']['CreateGameResponseBody'];
+export type DeleteGameResponseBody = components['schemas']['DeleteGameResponseBody'];
+export type ErrorDetail = components['schemas']['ErrorDetail'];
+export type ErrorModel = components['schemas']['ErrorModel'];
+export type GetAllGamesResponseBody = components['schemas']['GetAllGamesResponseBody'];
+export type GetAllGamesResponseObject = components['schemas']['GetAllGamesResponseObject'];
+export type GetGameResponseBody = components['schemas']['GetGameResponseBody'];
+export type UpdateGameRequestPayload = components['schemas']['UpdateGameRequestPayload'];
+export type UpdateGameResponseBody = components['schemas']['UpdateGameResponseBody'];
 export type $defs = Record<string, never>;
 export type operations = Record<string, never>;

@@ -48,9 +48,11 @@ func (handler *GameHandler) RegisterRoutes(api huma.API) {
 }
 
 type CreateGameRequestPayload struct {
-	Body struct {
-		GameName string `json:"gameName" doc:"The name of the game" required:"true"`
-	}
+	GameName string `json:"gameName" doc:"The name of the game" required:"true"`
+}
+
+type CreateGameRequest struct {
+	Body CreateGameRequestPayload
 }
 
 type CreateGameResponse struct {
@@ -62,19 +64,19 @@ type CreateGameResponse struct {
 }
 
 func (handler *GameHandler) CreateGame(
-	ctx context.Context, input *CreateGameRequestPayload,
+	ctx context.Context, input *CreateGameRequest,
 ) (*CreateGameResponse, error) {
-	var gameRequest CreateGameRequestPayload
 	var gameResponse CreateGameResponse
 
 	err := handler.Database.QueryRow(
 		"INSERT INTO games (game_name) VALUES ($1) RETURNING id, game_name",
-		gameRequest.Body.GameName,
+		input.Body.GameName,
 	).Scan(&gameResponse.Body.Id, &gameResponse.Body.GameName)
-
 	if err != nil {
 		return nil, huma.Error500InternalServerError("Database Error")
 	}
+
+	gameResponse.Status = 201
 	return &gameResponse, nil
 }
 
@@ -135,7 +137,6 @@ func (handler *GameHandler) GetGame(
 		"SELECT game_name FROM games WHERE id = ($1)",
 		gameId,
 	).Scan(&gameResponse.Body.GameName)
-
 	if err != nil {
 		return nil, huma.Error500InternalServerError("Query Failed")
 	}
@@ -165,12 +166,13 @@ func (handler *GameHandler) DeleteGame(
 	return &gameResponse, nil
 }
 
+type UpdateGameRequestPayload struct {
+	GameName *string `json:"gameName" doc:"The updated name of the game" required:"true"`
+}
+
 type UpdateGameRequest struct {
 	GamePathRequest
-
-	Body struct {
-		GameName *string `json:"gameName" doc:"The updated name of the game" required:"true"`
-	}
+	Body UpdateGameRequestPayload
 }
 
 type UpdateGameResponse struct {
@@ -183,7 +185,6 @@ type UpdateGameResponse struct {
 func (handler *GameHandler) UpdateGame(
 	ctx context.Context, input *UpdateGameRequest,
 ) (*UpdateGameResponse, error) {
-	var gameRequest UpdateGameRequest
 	var gameResponse UpdateGameResponse
 
 	gameId := input.Id
@@ -198,9 +199,8 @@ func (handler *GameHandler) UpdateGame(
 
 	err := handler.Database.QueryRow(
 		query,
-		gameRequest.Body.GameName, gameId,
+		input.Body.GameName, gameId,
 	).Scan(&gameResponse.Body.Id, &gameResponse.Body.GameName)
-
 	if err != nil {
 		return nil, huma.Error500InternalServerError("Database Error")
 	}

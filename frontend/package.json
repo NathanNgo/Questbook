@@ -13,7 +13,7 @@
     "format": "biome format",
     "lint": "biome lint",
     "check": "biome check",
-    "generate:api": "openapi-typescript ${API_URL:-http://localhost:8080/openapi.json} -o ./src/types/api.ts",
+    "generate:api": "openapi-typescript ${API_URL:-http://localhost:8080/openapi.json} -o ./src/types/api.ts --root-types --root-types-no-schema-prefix",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
