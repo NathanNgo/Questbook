@@ -25,12 +25,6 @@ type Message struct {
 	Payload json.RawMessage `json:"payload"`
 }
 
-// This is what a "Client" looks like.
-type Client struct {
-	Connection *websocket.Conn
-	SessionId  string
-}
-
 // This is what a HandlerFunc needs to look like.
 type HandlerFunc func(payload []byte, client *Client)
 
