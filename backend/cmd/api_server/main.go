@@ -10,9 +10,8 @@ import (
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 
-	_ "github.com/NathanNgo/Questbook/backend/docs"
-
-	httpSwagger "github.com/swaggo/http-swagger"
+	"github.com/danielgtaylor/huma/v2"
+	"github.com/danielgtaylor/huma/v2/adapters/humago"
 )
 
 const defaultServerPort = ":8080"
@@ -33,16 +32,11 @@ func corsMiddleware(multiplexer http.Handler) http.Handler {
 	})
 }
 
-//	@title			Questbook API Server
-//	@version		1.0
-//	@description	API server for Questbook
-
 func main() {
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
 		log.Fatalf("Could not find database")
 	}
-
 	database, err := sql.Open("pgx", databaseURL)
 	if err != nil {
 		log.Fatalf("Error opening database: %v", err)
@@ -59,16 +53,14 @@ func main() {
 	}
 	multiplexer := http.NewServeMux()
 
+	api := humago.New(multiplexer, huma.DefaultConfig("Questbook API", "1.0.0"))
+
 	gameHandler := new(apiserver.GameHandler)
 	gameHandler.Database = database
 
-	gameHandler.RegisterRoutes(multiplexer)
+	gameHandler.RegisterRoutes(api)
 
 	wrappedHandler := corsMiddleware(multiplexer)
-
-	multiplexer.Handle("/swagger/", httpSwagger.Handler(
-		httpSwagger.URL("doc.json"),
-	))
 
 	log.Printf("Server started on port %s", defaultServerPort)
 

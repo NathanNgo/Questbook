@@ -1,55 +1,61 @@
-import type { CreateGamePayload, UpdateGamePayload } from "./payloads";
-
-const BASE_URL = "http://localhost:8080";
+import {
+    type CreateGameRequestPayload,
+    client,
+    type UpdateGameRequestPayload,
+} from "../../../shared/api/client";
 
 export async function fetchGames() {
-    const response = await fetch(`${BASE_URL}/games`);
-    if (!response.ok) {
+    const { data, error } = await client.GET("/games");
+
+    if (error) {
         throw new Error("Failed to fetch Questbook games");
     }
 
-    return response.json();
+    return data;
 }
 
-export async function createGame(payload: CreateGamePayload) {
-    const response = await fetch(`${BASE_URL}/games`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+export async function createGame(payload: CreateGameRequestPayload) {
+    const { data, error } = await client.POST("/games", {
+        body: { ...payload },
+        headers: { "Content-Type": "application/json" },
     });
 
-    if (!response.ok) {
+    if (error) {
         throw new Error("Failed to create Questbook game");
     }
 
-    return response.json();
+    return data;
 }
 
 export async function deleteGame(gameId: number) {
-    const response = await fetch(`${BASE_URL}/games/${gameId}`, {
-        method: "DELETE",
+    const { data, error } = await client.DELETE("/games/{id}", {
+        params: {
+            path: { id: gameId.toString() },
+        },
+        headers: { "Content-Type": "application/json" },
     });
 
-    if (!response.ok) {
+    if (error) {
         throw new Error("Failed to delete Questbook game");
     }
 
-    return response.json();
+    return data;
 }
 
-export async function updateGame(gameId: number, payload: UpdateGamePayload) {
-    const response = await fetch(`${BASE_URL}/games/${gameId}`, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json",
+export async function updateGame(
+    gameId: number,
+    payload: UpdateGameRequestPayload,
+) {
+    const { data, error } = await client.PATCH("/games/{id}", {
+        params: {
+            path: { id: gameId.toString() },
         },
-        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json" },
+        body: { ...payload },
     });
 
-    if (!response.ok) {
+    if (error) {
         throw new Error(`Failed to update game\npayload:\n${payload}`);
     }
-    return response.json();
+    return data;
 }

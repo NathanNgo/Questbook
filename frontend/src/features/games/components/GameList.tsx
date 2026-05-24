@@ -1,5 +1,5 @@
 import { sortByNumericValue } from "#/shared/utils/sortBy";
-import type { Game } from "../api/types";
+import type { Game } from "../api/types.ts";
 import styles from "./GameList.module.css";
 import { GameListItem } from "./GameListItem";
 
@@ -17,17 +17,18 @@ export function GameList({
     if (!games.length) {
         return <p>No Games yet...</p>;
     }
+
     return (
         <div className={styles.gameList}>
             {/*TODO: Give game a proper type with OpenAPI*/}
             {(games as Game[])
-                .sort(sortByNumericValue((game) => game.id))
+                .sort(sortByNumericValue((game) => Number(game.id)))
                 .map((game) => (
                     <GameListItem
                         game={game}
                         onDeleteGame={() => onDeleteGame(game)}
                         onChangeGameName={(newGameName: string) =>
-                            onChangeGameName(game.id, newGameName)
+                            onChangeGameName(Number(game.id), newGameName)
                         }
                         key={game.id}
                     />
