@@ -6,11 +6,10 @@ import (
 	"net/http"
 	"os"
 
-	apiserver "github.com/NathanNgo/Questbook/backend/internal/api_server"
+	"github.com/NathanNgo/Questbook/backend/internal/api_server"
+	"github.com/NathanNgo/Questbook/backend/internal/websockets"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
-
-	_ "github.com/NathanNgo/Questbook/backend/docs"
 
 	httpSwagger "github.com/swaggo/http-swagger"
 )
@@ -21,7 +20,10 @@ func corsMiddleware(multiplexer http.Handler) http.Handler {
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		writer.Header().Set("Access-Control-Allow-Origin", "*")
 
-		writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE")
+		writer.Header().Set(
+			"Access-Control-Allow-Methods",
+			"GET, POST, OPTIONS, PUT, PATCH, DELETE",
+		)
 		writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
 		if request.Method == "OPTIONS" {
@@ -38,11 +40,13 @@ func corsMiddleware(multiplexer http.Handler) http.Handler {
 //	@description	API server for Questbook
 
 func main() {
+	// Read env and get database URL.
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
 		log.Fatalf("Could not find database")
 	}
 
+	// Open database pool.
 	database, err := sql.Open("pgx", databaseURL)
 	if err != nil {
 		log.Fatalf("Error opening database: %v", err)
@@ -54,15 +58,34 @@ func main() {
 		}
 	}()
 
+	// Attempt to ping database
 	if err := database.Ping(); err != nil {
 		log.Fatalf("Cannot reach database: %v", err)
 	}
+	// Create a "router".
 	multiplexer := http.NewServeMux()
 
-	gameHandler := new(apiserver.GameHandler)
-	gameHandler.Database = database
+	// Create a websocket router.
+	websocketRouter := websockets.NewRouter()
 
+	debugHandler := &api_server.DebugHandler{
+		WebsocketRouter: websocketRouter,
+	}
+	// Composite literal.
+	// Create struct and immediately return a pointer to the struct.
+	// Also, assign values to the fields of the struct, such as Database = database.
+	gameHandler := &api_server.GameHandler{
+		Database:        database,
+		WebsocketRouter: websocketRouter,
+	}
+
+	// Call "registerroutes" on sessionHandler struct, passing in the router.
+	// This will register the relevant callbacks to the relevant methods.
 	gameHandler.RegisterRoutes(multiplexer)
+
+	// Registers all DebugHandler websocket handler functions onto the Websocket Router,
+	// So that the Websocket Router can route to them and call them.
+	debugHandler.RegisterWebsocketHandlers()
 
 	wrappedHandler := corsMiddleware(multiplexer)
 

@@ -8,6 +8,7 @@ tool (
 )
 
 require (
+	github.com/gorilla/websocket v1.5.3
 	github.com/jackc/pgx/v5 v5.9.2
 	github.com/swaggo/http-swagger v1.3.4
 	github.com/swaggo/swag v1.16.6

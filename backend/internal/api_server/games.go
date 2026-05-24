@@ -5,10 +5,13 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/NathanNgo/Questbook/backend/internal/websockets"
 )
 
 type GameHandler struct {
-	Database *sql.DB
+	Database        *sql.DB
+	WebsocketRouter *websockets.Router
 }
 
 func (handler *GameHandler) RegisterRoutes(multiplexer *http.ServeMux) {
@@ -17,6 +20,7 @@ func (handler *GameHandler) RegisterRoutes(multiplexer *http.ServeMux) {
 	multiplexer.HandleFunc("GET /games/{id}", handler.GetGame)
 	multiplexer.HandleFunc("DELETE /games/{id}", handler.DeleteGame)
 	multiplexer.HandleFunc("PATCH /games/{id}", handler.UpdateGame)
+	multiplexer.HandleFunc("GET /games/{id}/websocket", handler.WebsocketUpgradeSession)
 }
 
 type CreateGameRequestPayload struct {
@@ -255,4 +259,31 @@ func (handler *GameHandler) UpdateGame(
 	if err := json.NewEncoder(writer).Encode(gameResponse); err != nil {
 		log.Printf("UpdateGame failed to encode response")
 	}
+}
+
+func (handler *GameHandler) WebsocketUpgradeSession(
+	writer http.ResponseWriter, request *http.Request,
+) {
+	sessionId := request.PathValue("id")
+	if sessionId == "" {
+		http.Error(writer, "ID is required", http.StatusBadRequest)
+		return
+	}
+
+	// Upgrade to websocket Connection
+	upgrader := websockets.WebsocketUpgrader()
+	connection, err := upgrader.Upgrade(writer, request, nil)
+	if err != nil {
+		http.Error(
+			writer, "Could not upgrade to websocket connection", http.StatusBadRequest,
+		)
+		return
+	}
+
+	client := &websockets.Client{
+		Connection: connection,
+		SessionId:  sessionId,
+	}
+
+	handler.WebsocketRouter.ServeWebSocket(client)
 }
