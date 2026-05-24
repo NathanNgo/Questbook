@@ -1,7 +1,7 @@
 import {
+    type CreateGameRequestPayload,
     client,
-    type CreateGameRequestBody,
-    type UpdateGameRequestBody,
+    type UpdateGameRequestPayload,
 } from "../../../shared/api/client";
 
 export async function fetchGames() {
@@ -14,7 +14,7 @@ export async function fetchGames() {
     return data;
 }
 
-export async function createGame(payload: CreateGameRequestBody) {
+export async function createGame(payload: CreateGameRequestPayload) {
     const { data, error } = await client.POST("/games", {
         body: { ...payload },
         headers: { "Content-Type": "application/json" },
@@ -44,7 +44,7 @@ export async function deleteGame(gameId: number) {
 
 export async function updateGame(
     gameId: number,
-    payload: UpdateGameRequestBody,
+    payload: UpdateGameRequestPayload,
 ) {
     const { data, error } = await client.PATCH("/games/{id}", {
         params: {

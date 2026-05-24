@@ -1,12 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { CreateGamePayload, UpdateGamePayload } from "./payloads";
+import type {
+    CreateGameRequestPayload,
+    UpdateGameRequestPayload,
+} from "../../../shared/api/client";
 import { createGame, deleteGame, updateGame } from "./requests";
 
 export function useCreateGameMutation() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (payload: CreateGamePayload) => createGame(payload),
+        mutationFn: (payload: CreateGameRequestPayload) => createGame(payload),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["games"] });
         },
@@ -32,7 +35,7 @@ export function useChangeGameMutation() {
             payload,
         }: {
             gameId: number;
-            payload: UpdateGamePayload;
+            payload: UpdateGameRequestPayload;
         }) => updateGame(gameId, payload),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["games"] }),
     });
