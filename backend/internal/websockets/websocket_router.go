@@ -3,6 +3,7 @@ package websockets
 import (
 	"encoding/json"
 	"log"
+	"sync"
 
 	"github.com/gorilla/websocket"
 )
@@ -30,19 +31,34 @@ type HandlerFunc func(payload []byte, client *Client)
 
 // This is what a "Router" looks like. Right now it just holds a routes mapping.
 type Router struct {
-	routes map[MessageType]HandlerFunc
+	routes     map[MessageType]HandlerFunc
+	games      map[string]map[*Client]bool
+	gamesMutex sync.RWMutex
 }
 
 // This is the constructor method.
 func NewRouter() *Router {
 	return &Router{
 		routes: make(map[MessageType]HandlerFunc),
+		games:  make(map[string]map[*Client]bool),
 	}
 }
 
 // Setter for routes.
-func (router *Router) SetRoute(routeType MessageType, routeHandler HandlerFunc) {
+func (router *Router) AddRouteHandler(routeType MessageType, routeHandler HandlerFunc) {
 	router.routes[routeType] = routeHandler
+}
+
+// Setter for games
+func (router *Router) AddClientConnectionToGame(client *Client) {
+	router.gamesMutex.Lock()
+	defer router.gamesMutex.Unlock()
+
+	if router.games[client.GameId] == nil {
+		router.games[client.GameId] = make(map[*Client]bool)
+	}
+
+	router.games[client.GameId][client] = true
 }
 
 // Method on the Router class that starts listening and serving WS connections.
