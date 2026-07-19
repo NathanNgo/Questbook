@@ -2,6 +2,8 @@ package websockets
 
 import "github.com/gorilla/websocket"
 
+const WebsocketSendChannelBytes = 256
+
 // This is what a "Client" looks like.
 type Client struct {
 	Connection *websocket.Conn

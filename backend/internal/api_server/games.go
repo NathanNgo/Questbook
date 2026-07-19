@@ -235,6 +235,7 @@ func (handler *GameHandler) WebsocketUpgradeSession(
 	client := &websockets.Client{
 		Connection: connection,
 		GameId:     gameId,
+		Send:       make(chan []byte, websockets.WebsocketSendChannelBytes),
 	}
 
 	handler.WebsocketRouter.ServeWebSocket(client)

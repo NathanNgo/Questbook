@@ -6,10 +6,12 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+const MaxReadWriteBufferBytes = 1024
+
 func WebsocketUpgrader() *websocket.Upgrader {
 	return &websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
+		ReadBufferSize:  MaxReadWriteBufferBytes,
+		WriteBufferSize: MaxReadWriteBufferBytes,
 		CheckOrigin: func(r *http.Request) bool {
 			return true
 		},
