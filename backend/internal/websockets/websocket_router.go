@@ -41,6 +41,7 @@ func NewRouter() *Router {
 	return &Router{
 		routes: make(map[MessageType]HandlerFunc),
 		games:  make(map[string]map[*Client]bool),
+		// { gameId: { client: bool }}
 	}
 }
 
@@ -61,14 +62,26 @@ func (router *Router) AddClientConnectionToGame(client *Client) {
 	router.games[client.GameId][client] = true
 }
 
-func (router *Router) RemoveClientConnectionFromGame() {
-	return
+func (router *Router) RemoveClientConnectionFromGame(client *Client) {
+	router.gamesMutex.Lock()
+	defer router.gamesMutex.Unlock()
+
+	if _, exists := router.games[client.GameId][client]; exists {
+		delete(router.games[client.GameId], client)
+		close(client.Send)
+	}
 }
 
 // Method on the Router class that starts listening and serving WS connections.
 func (router *Router) ServeWebSocket(client *Client) {
+	router.AddClientConnectionToGame(client)
+
 	// Defer the close of the connection so we always close the connection.
-	defer client.Connection.Close()
+	defer func() {
+		router.RemoveClientConnectionFromGame(client)
+		client.Connection.Close()
+	}()
+
 	client.Connection.SetReadLimit(MaxMessageSizeBytes)
 
 	// Start an infinite loop

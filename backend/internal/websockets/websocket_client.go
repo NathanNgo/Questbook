@@ -16,5 +16,6 @@ func (client *Client) ReadPump(router *Router) {
 }
 
 func (client *Client) WritePump(router *Router) {
+	defer client.Connection.Close()
 	return
 }
