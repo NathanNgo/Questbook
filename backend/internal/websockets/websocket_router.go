@@ -61,7 +61,9 @@ func (router *Router) AddClientConnectionToGame(client *Client) {
 	router.games[client.GameId][client] = true
 }
 
-func (router *Router) RemoveClientConnectionFromGame()
+func (router *Router) RemoveClientConnectionFromGame() {
+	return
+}
 
 // Method on the Router class that starts listening and serving WS connections.
 func (router *Router) ServeWebSocket(client *Client) {

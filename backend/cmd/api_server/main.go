@@ -81,6 +81,8 @@ func main() {
 	// Call "registerroutes" on sessionHandler struct, passing in the router.
 	// This will register the relevant callbacks to the relevant methods.
 	gameHandler.RegisterRoutes(api)
+	// Register the websocket upgrade session route directly, outsite of Huma
+	multiplexer.HandleFunc("GET /games/{id}/websocket", gameHandler.WebsocketUpgradeSession)
 
 	// Registers all DebugHandler websocket handler functions onto the Websocket Router,
 	// So that the Websocket Router can route to them and call them.

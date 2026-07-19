@@ -47,12 +47,6 @@ func (handler *GameHandler) RegisterRoutes(api huma.API) {
 		Summary: "Update a game's information",
 		Tags:    []string{"Games"},
 	}, handler.UpdateGame)
-	huma.Register(api, huma.Operation{
-		Method:  http.MethodGet,
-		Path:    "/games/{id}/websocket",
-		Summary: "Upgrade to a websocket connection for a game session",
-		Tags:    []string{"Games"},
-	}, handler.WebsocketUpgradeSession)
 }
 
 type CreateGameRequestPayload struct {
