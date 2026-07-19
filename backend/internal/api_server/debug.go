@@ -14,14 +14,14 @@ type DebugHandler struct {
 }
 
 func (handler *DebugHandler) RegisterWebsocketHandlers() {
-	handler.WebsocketRouter.SetRoute(websockets.MessageEcho, handler.handleEcho)
+	handler.WebsocketRouter.AddRouteHandler(websockets.MessageEcho, handler.handleEcho)
 }
 
 func (handler *DebugHandler) handleEcho(payload []byte, client *websockets.Client) {
 	client.Connection.WriteMessage(
 		websocket.TextMessage,
 		[]byte(
-			fmt.Sprintf("Hello %s, your message was %s\n", client.SessionId, payload),
+			fmt.Sprintf("Hello %s, your message was %s\n", client.GameId, payload),
 		),
 	)
 }

@@ -216,8 +216,8 @@ func (handler *GameHandler) UpdateGame(
 func (handler *GameHandler) WebsocketUpgradeSession(
 	writer http.ResponseWriter, request *http.Request,
 ) {
-	sessionId := request.PathValue("id")
-	if sessionId == "" {
+	gameId := request.PathValue("id")
+	if gameId == "" {
 		http.Error(writer, "ID is required", http.StatusBadRequest)
 		return
 	}
@@ -234,7 +234,7 @@ func (handler *GameHandler) WebsocketUpgradeSession(
 
 	client := &websockets.Client{
 		Connection: connection,
-		SessionId:  sessionId,
+		GameId:     gameId,
 	}
 
 	handler.WebsocketRouter.ServeWebSocket(client)
