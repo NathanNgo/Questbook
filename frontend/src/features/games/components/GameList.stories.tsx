@@ -18,7 +18,7 @@ const meta: Meta<typeof GameList> = {
         function handleChangeGameName(gameId: number, newGameName: string) {
             updateArgs({
                 games: games.map((game) =>
-                    game.id === gameId
+                    Number(game.id) === gameId
                         ? { ...game, gameName: newGameName }
                         : game,
                 ),
@@ -40,7 +40,7 @@ type Story = StoryObj<typeof GameList>;
 
 function makeGames(count: number, gameNamesOverride?: string[]) {
     return Array.from({ length: count }, (_, gameIndex) => ({
-        id: gameIndex + 1,
+        id: (gameIndex + 1).toString(),
         gameName: gameNamesOverride
             ? gameNamesOverride[gameIndex]
             : `Game ${gameIndex + 1}`,

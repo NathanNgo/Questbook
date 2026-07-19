@@ -1,4 +1,3 @@
-export type Game = {
-    id: number;
-    gameName: string;
-};
+import type { CreateGameResponseBody } from "../../../types/api";
+
+export type Game = CreateGameResponseBody;

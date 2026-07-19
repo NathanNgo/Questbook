@@ -6,7 +6,7 @@ function GameListContainer() {
     const { games, deleteGame, changeGame } = useGames();
 
     function handleDeleteGame(game: Game) {
-        deleteGame(game.id);
+        deleteGame(Number(game.id));
     }
 
     function handleChangeGameName(gameId: number, newGameName: string) {
@@ -15,7 +15,7 @@ function GameListContainer() {
 
     return (
         <GameList
-            games={games}
+            games={games.games ?? []}
             onDeleteGame={handleDeleteGame}
             onChangeGameName={handleChangeGameName}
         />

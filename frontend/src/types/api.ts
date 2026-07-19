@@ -4,115 +4,347 @@
  */
 
 export interface paths {
-    "/sessions": {
-        /** Get all currently stored sessions */
+    "/games": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all games */
         get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
             responses: {
-                /** OK */
+                /** @description OK */
                 200: {
-                    schema: definitions["internal_api_server.GetAllSessionsResponseObject"][];
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["GetAllGamesResponseBody"];
+                    };
                 };
-                /** Internal Error */
-                500: {
-                    schema: string;
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ErrorModel"];
+                    };
                 };
             };
         };
-        /** Create a new session with the provided session name */
+        put?: never;
+        /** Create a new game */
         post: {
             parameters: {
-                body: {
-                    /** Session details */
-                    request: definitions["internal_api_server.CreateSessionRequestPayload"];
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CreateGameRequestPayload"];
                 };
             };
             responses: {
-                /** Created */
+                /** @description Created */
                 201: {
-                    schema: definitions["internal_api_server.CreateSessionResponse"];
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CreateGameResponseBody"];
+                    };
                 };
-                /** Invalid JSON payload */
-                400: {
-                    schema: string;
-                };
-                /** Database Error */
-                500: {
-                    schema: string;
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ErrorModel"];
+                    };
                 };
             };
         };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    "/sessions/{id}": {
-        /** Finds and returns a session object using an ID */
+    "/games/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a game by ID */
         get: {
             parameters: {
+                query?: never;
+                header?: never;
                 path: {
-                    /** Session ID */
+                    /** @description The Id of the game being request */
                     id: string;
                 };
+                cookie?: never;
             };
+            requestBody?: never;
             responses: {
-                /** OK */
+                /** @description OK */
                 200: {
-                    schema: definitions["internal_api_server.GetSessionResponse"];
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["GetGameResponseBody"];
+                    };
                 };
-                /** ID is required */
-                400: {
-                    schema: string;
-                };
-                /** Internal Error */
-                500: {
-                    schema: string;
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ErrorModel"];
+                    };
                 };
             };
         };
-        /** Deletes a session that matches a given ID */
+        put?: never;
+        post?: never;
+        /** Delete a game by ID */
         delete: {
             parameters: {
+                query?: never;
+                header?: never;
                 path: {
-                    /** Session ID */
+                    /** @description The Id of the game being request */
                     id: string;
                 };
+                cookie?: never;
             };
+            requestBody?: never;
             responses: {
-                /** OK */
+                /** @description OK */
                 200: {
-                    schema: definitions["internal_api_server.DeleteSessionResponse"];
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["DeleteGameResponseBody"];
+                    };
                 };
-                /** ID is required */
-                400: {
-                    schema: string;
-                };
-                /** Internal Error */
-                500: {
-                    schema: string;
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ErrorModel"];
+                    };
                 };
             };
         };
+        options?: never;
+        head?: never;
+        /** Update a game's information */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    /** @description The Id of the game being request */
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UpdateGameRequestPayload"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UpdateGameResponseBody"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ErrorModel"];
+                    };
+                };
+            };
+        };
+        trace?: never;
     };
 }
-
-export interface definitions {
-    "internal_api_server.CreateSessionRequestPayload": {
-        sessionName?: string;
+export type webhooks = Record<string, never>;
+export interface components {
+    schemas: {
+        CreateGameRequestPayload: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example https://example.com/schemas/CreateGameRequestPayload.json
+             */
+            readonly $schema?: string;
+            /** @description The name of the game */
+            gameName: string;
+        };
+        CreateGameResponseBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example https://example.com/schemas/CreateGameResponseBody.json
+             */
+            readonly $schema?: string;
+            gameName: string;
+            id: string;
+        };
+        DeleteGameResponseBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example https://example.com/schemas/DeleteGameResponseBody.json
+             */
+            readonly $schema?: string;
+            gameName: string;
+            id: string;
+        };
+        ErrorDetail: {
+            /** @description Where the error occurred, e.g. 'body.items[3].tags' or 'path.thing-id' */
+            location?: string;
+            /** @description Error message text */
+            message?: string;
+            /** @description The value at the given location */
+            value?: unknown;
+        };
+        ErrorModel: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example https://example.com/schemas/ErrorModel.json
+             */
+            readonly $schema?: string;
+            /**
+             * @description A human-readable explanation specific to this occurrence of the problem.
+             * @example Property foo is required but is missing.
+             */
+            detail?: string;
+            /** @description Optional list of individual error details */
+            errors?: components["schemas"]["ErrorDetail"][] | null;
+            /**
+             * Format: uri
+             * @description A URI reference that identifies the specific occurrence of the problem.
+             * @example https://example.com/error-log/abc123
+             */
+            instance?: string;
+            /**
+             * Format: int64
+             * @description HTTP status code
+             * @example 400
+             */
+            status?: number;
+            /**
+             * @description A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+             * @example Bad Request
+             */
+            title?: string;
+            /**
+             * Format: uri
+             * @description A URI reference to human-readable documentation for the error.
+             * @default about:blank
+             * @example https://example.com/errors/example
+             */
+            type: string;
+        };
+        GetAllGamesResponseBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example https://example.com/schemas/GetAllGamesResponseBody.json
+             */
+            readonly $schema?: string;
+            /** @description A list of all games */
+            games: components["schemas"]["GetAllGamesResponseObject"][] | null;
+        };
+        GetAllGamesResponseObject: {
+            gameName: string;
+            id: string;
+        };
+        GetGameResponseBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example https://example.com/schemas/GetGameResponseBody.json
+             */
+            readonly $schema?: string;
+            gameName: string;
+        };
+        UpdateGameRequestPayload: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example https://example.com/schemas/UpdateGameRequestPayload.json
+             */
+            readonly $schema?: string;
+            /** @description The updated name of the game */
+            gameName: string | null;
+        };
+        UpdateGameResponseBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example https://example.com/schemas/UpdateGameResponseBody.json
+             */
+            readonly $schema?: string;
+            gameName: string;
+            id: string;
+        };
     };
-    "internal_api_server.CreateSessionResponse": {
-        id?: string;
-        sessionName?: string;
-    };
-    "internal_api_server.DeleteSessionResponse": {
-        id?: string;
-        sessionName?: string;
-    };
-    "internal_api_server.GetAllSessionsResponseObject": {
-        id?: string;
-        sessionName?: string;
-    };
-    "internal_api_server.GetSessionResponse": {
-        id?: string;
-    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
-
-export type operations = {};
-
-export type external = {};
+export type CreateGameRequestPayload =
+    components["schemas"]["CreateGameRequestPayload"];
+export type CreateGameResponseBody =
+    components["schemas"]["CreateGameResponseBody"];
+export type DeleteGameResponseBody =
+    components["schemas"]["DeleteGameResponseBody"];
+export type ErrorDetail = components["schemas"]["ErrorDetail"];
+export type ErrorModel = components["schemas"]["ErrorModel"];
+export type GetAllGamesResponseBody =
+    components["schemas"]["GetAllGamesResponseBody"];
+export type GetAllGamesResponseObject =
+    components["schemas"]["GetAllGamesResponseObject"];
+export type GetGameResponseBody = components["schemas"]["GetGameResponseBody"];
+export type UpdateGameRequestPayload =
+    components["schemas"]["UpdateGameRequestPayload"];
+export type UpdateGameResponseBody =
+    components["schemas"]["UpdateGameResponseBody"];
+export type $defs = Record<string, never>;
+export type operations = Record<string, never>;
