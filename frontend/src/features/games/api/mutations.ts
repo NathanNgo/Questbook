@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type {
     CreateGameRequestPayload,
     UpdateGameRequestPayload,
-} from "../../../shared/api/client";
+} from "#/types/api";
 import { createGame, deleteGame, updateGame } from "./requests";
 
 export function useCreateGameMutation() {

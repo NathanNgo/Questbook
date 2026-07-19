@@ -19,7 +19,7 @@ func (handler *GameHandler) RegisterRoutes(api huma.API) {
 		Path:          "/games",
 		Summary:       "Create a new game",
 		Tags:          []string{"Games"},
-		DefaultStatus: 201,
+		DefaultStatus: http.StatusCreated,
 	}, handler.CreateGame)
 	huma.Register(api, huma.Operation{
 		Method:  http.MethodGet,
@@ -56,8 +56,7 @@ type CreateGameRequest struct {
 }
 
 type CreateGameResponse struct {
-	Status int `status:"201"`
-	Body   struct {
+	Body struct {
 		Id       string `json:"id"`
 		GameName string `json:"gameName"`
 	}
@@ -76,7 +75,6 @@ func (handler *GameHandler) CreateGame(
 		return nil, huma.Error500InternalServerError("Database Error")
 	}
 
-	gameResponse.Status = 201
 	return &gameResponse, nil
 }
 
@@ -167,7 +165,7 @@ func (handler *GameHandler) DeleteGame(
 }
 
 type UpdateGameRequestPayload struct {
-	GameName *string `json:"gameName" doc:"The updated name of the game" required:"true"`
+	GameName *string `json:"gameName" doc:"The updated name of the game" required:"false"`
 }
 
 type UpdateGameRequest struct {

@@ -1,8 +1,9 @@
-import {
-    type CreateGameRequestPayload,
-    client,
-    type UpdateGameRequestPayload,
-} from "../../../shared/api/client";
+import { client } from "#/shared/api/client";
+
+import type {
+    CreateGameRequestPayload,
+    UpdateGameRequestPayload,
+} from "#/types/api";
 
 export async function fetchGames() {
     const { data, error } = await client.GET("/games");

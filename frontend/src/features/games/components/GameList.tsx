@@ -20,7 +20,6 @@ export function GameList({
 
     return (
         <div className={styles.gameList}>
-            {/*TODO: Give game a proper type with OpenAPI*/}
             {(games as Game[])
                 .sort(sortByNumericValue((game) => Number(game.id)))
                 .map((game) => (
