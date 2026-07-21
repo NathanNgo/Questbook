@@ -2,10 +2,7 @@ package websockets
 
 import (
 	"encoding/json"
-	"log"
 	"sync"
-
-	"github.com/gorilla/websocket"
 )
 
 const MaxMessageSizeBytes = 4096
@@ -84,33 +81,6 @@ func (router *Router) ServeWebSocket(client *Client) {
 
 	client.Connection.SetReadLimit(MaxMessageSizeBytes)
 
-	// Start an infinite loop
-	for {
-		// Try to read the message from the connection
-		_, messageBytes, err := client.Connection.ReadMessage()
-		if err != nil {
-			log.Println("Client disconnected or read error")
-			break
-		}
-
-		// Try to parse the bytes into JSON.
-		var message Message
-		if err := json.Unmarshal(messageBytes, &message); err != nil {
-			log.Println("Failed to unmarshall message")
-			client.Connection.WriteMessage(
-				websocket.TextMessage,
-				[]byte("Failed to unmarshall message"),
-			)
-			continue
-		}
-
-		// Pass the JSON message into the correct handler function.
-		// We can get the correct handler function from the mapping "routes".
-		// We actually need to run the handler function as well
-		if handler, exists := router.routes[message.Type]; exists {
-			handler(message.Payload, client)
-		} else {
-			log.Printf("Could not find route of type %s", message.Type)
-		}
-	}
+	go client.WritePump()
+	client.ReadPump(router)
 }
