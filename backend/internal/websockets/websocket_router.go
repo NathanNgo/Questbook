@@ -84,3 +84,24 @@ func (router *Router) ServeWebSocket(client *Client) {
 	go client.WritePump()
 	client.ReadPump(router)
 }
+
+func (router *Router) Broadcast(gameId string, message []byte) {
+	// No one else make any writes while I'm reading the list of games.
+	router.gamesMutex.RLock()
+	defer router.gamesMutex.RUnlock()
+
+	// Grab the game
+	game, exists := router.games[gameId]
+	if !exists {
+		return
+	}
+
+	// For every client connected to the game, drop a message in the channel.
+	for client := range game {
+		// Make this a non-blocking send.
+		select {
+		case client.Send <- message: // Attempt to put the message into the channel.
+		default: // If the channel is full, drop the message.
+		}
+	}
+}

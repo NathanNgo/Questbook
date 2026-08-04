@@ -57,5 +57,4 @@ func (client *Client) WritePump() {
 			break
 		}
 	}
-	return
 }
