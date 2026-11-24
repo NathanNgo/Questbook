@@ -12,7 +12,7 @@ const WebsocketSendChannelBytes = 256
 // This is what a "Client" looks like.
 type Client struct {
 	Connection *websocket.Conn
-	GameId     string
+	GroupId    string
 	Send       chan []byte
 }
 
