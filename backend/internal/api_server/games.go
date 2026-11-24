@@ -6,11 +6,13 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/NathanNgo/Questbook/backend/internal/websockets"
 	"github.com/danielgtaylor/huma/v2"
 )
 
 type GameHandler struct {
-	Database *sql.DB
+	Database        *sql.DB
+	WebsocketRouter *websockets.Router
 }
 
 func (handler *GameHandler) RegisterRoutes(api huma.API) {
@@ -203,4 +205,32 @@ func (handler *GameHandler) UpdateGame(
 		return nil, huma.Error500InternalServerError("Database Error")
 	}
 	return &gameResponse, nil
+}
+
+func (handler *GameHandler) WebsocketUpgradeSession(
+	writer http.ResponseWriter, request *http.Request,
+) {
+	gameId := request.PathValue("id")
+	if gameId == "" {
+		http.Error(writer, "ID is required", http.StatusBadRequest)
+		return
+	}
+
+	// Upgrade to websocket Connection
+	upgrader := websockets.WebsocketUpgrader()
+	connection, err := upgrader.Upgrade(writer, request, nil)
+	if err != nil {
+		http.Error(
+			writer, "Could not upgrade to websocket connection", http.StatusBadRequest,
+		)
+		return
+	}
+
+	client := &websockets.Client{
+		Connection: connection,
+		GroupId:    gameId,
+		Send:       make(chan []byte, websockets.WebsocketSendChannelBytes),
+	}
+
+	handler.WebsocketRouter.ServeWebSocket(client)
 }

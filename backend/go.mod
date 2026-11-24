@@ -7,7 +7,12 @@ tool (
 	github.com/golang-migrate/migrate/v4/cmd/migrate
 )
 
-require github.com/jackc/pgx/v5 v5.9.2
+require (
+	github.com/gorilla/websocket v1.5.3
+	github.com/jackc/pgx/v5 v5.9.2
+	github.com/swaggo/http-swagger v1.3.4
+	github.com/swaggo/swag v1.16.6
+)
 
 require (
 	cel.dev/expr v0.24.0 // indirect
