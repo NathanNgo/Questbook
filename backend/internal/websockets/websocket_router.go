@@ -52,19 +52,19 @@ func (router *Router) AddClientConnectionToGame(client *Client) {
 	router.gamesMutex.Lock()
 	defer router.gamesMutex.Unlock()
 
-	if router.games[client.GameId] == nil {
-		router.games[client.GameId] = make(map[*Client]bool)
+	if router.games[client.GroupId] == nil {
+		router.games[client.GroupId] = make(map[*Client]bool)
 	}
 
-	router.games[client.GameId][client] = true
+	router.games[client.GroupId][client] = true
 }
 
 func (router *Router) RemoveClientConnectionFromGame(client *Client) {
 	router.gamesMutex.Lock()
 	defer router.gamesMutex.Unlock()
 
-	if _, exists := router.games[client.GameId][client]; exists {
-		delete(router.games[client.GameId], client)
+	if _, exists := router.games[client.GroupId][client]; exists {
+		delete(router.games[client.GroupId], client)
 		close(client.Send)
 	}
 }

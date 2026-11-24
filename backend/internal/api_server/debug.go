@@ -20,6 +20,6 @@ func (handler *DebugHandler) RegisterWebsocketHandlers() {
 func (handler *DebugHandler) handleEcho(payload []byte, client *websockets.Client) {
 	client.Connection.WriteMessage(
 		websocket.TextMessage,
-		fmt.Appendf(nil, "Hello %s, your message was %s\n", client.GameId, payload),
+		fmt.Appendf(nil, "Hello %s, your message was %s\n", client.GroupId, payload),
 	)
 }
